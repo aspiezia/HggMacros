@@ -24,7 +24,7 @@ int MakeFit(bool save=false, TString sel="prova"){
 		cout<<endl;
 		cout<<"You have to provide 3 arguments:"<<endl;
 		cout<<"    - boolean to save (true) or not save (false)"<<endl;
-		cout<<"    - string for high-met category ('cat6') or for low-met category ('cat7')"<<endl;
+		cout<<"    - string for high-met category ('cat6') , for low-met category ('cat7') or ('ttHhad') or ('VHhadbtag') or ('VHhad0tag')"<<endl;
 		cout<<endl;
 		return;
 	}
@@ -53,6 +53,18 @@ int MakeFit(bool save=false, TString sel="prova"){
 	if(sel=="cat7"){
 		TFile *mass_SS  = new TFile("mass_SScat7.root");
 		TFile *dipho_SS = new TFile("diphobdt_output_SScat7.root");
+	}
+	if(sel=="ttHhad"){
+		TFile *mass_SS  = new TFile("mass_SSttHhad.root");
+		TFile *dipho_SS = new TFile("diphobdt_output_SSttHhad.root");
+	}
+	if(sel=="VHhadBtag"){
+		TFile *mass_SS  = new TFile("mass_SSVHhadBtag.root");
+		TFile *dipho_SS = new TFile("diphobdt_output_SSVHhadBtag.root");
+	}
+	if(sel=="VHhad0tag"){
+		TFile *mass_SS  = new TFile("mass_SSVHhad0tag.root");
+		TFile *dipho_SS = new TFile("diphobdt_output_SSVHhad0tag.root");
 	}
 	TTree *tree_mass_CS  = (TTree*)mass_CS->Get("treeDat");
 	TH1F *histo_mass_CS  = (TH1F*) mass_CS->Get("DAT");

@@ -342,7 +342,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		  }else if(sample=="CS"){
 		    //at least three jets and 0 btag medium
 		    if(photonPT_lead_<60*mass_/120.)continue;
-		    if(photonPT_sublead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
 		    if(j3_pt<25.)continue;
 		    if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 			 j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
@@ -350,13 +350,13 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		  }
 		}else if (sel=="VHhadbtag"){
 		  if(sample="SS"){
-		    if(category_!=10)continue;
+		    if(category_!=11)continue;
 		  }else if (sample="CS"){
 		    //same cut as vhhadbtag but inverted costheta
 		    if(photonPT_lead_<60*mass_/120.)continue;
-		    if(photonPT_sublead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
 		    if(j2_pt<27.)continue;
-		    if(j4_pt>20)continue;
+		    if(j4_pt>20.)continue;
 		    if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 			j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 			j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
@@ -366,13 +366,13 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		  }
 		}else if (sel=="VHhad0tag"){
 		  if(sample="SS"){
-		    if(category_!=10)continue;
+		    if(category_!=12)continue;
 		  }else if (sample="CS"){
 		    //same cut as vhhadbtag but inverted costheta
 		    if(photonPT_lead_<60*mass_/120.)continue;
-		    if(photonPT_sublead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
 		    if(j2_pt<40.)continue;
-		    if(j4_pt>20)continue;
+		    if(j4_pt>20.)continue;
 		    if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 			j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 			j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
@@ -432,6 +432,108 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		s_sig->SetBranchAddress("blind2",&blind2_);
 		s_sig->SetBranchAddress("electron",&electron_);
 		s_sig->SetBranchAddress("muon",&muon_);
+		s_sig->SetBranchAddress("njets_passing_kLooseID",&njets_passing_kLooseID_);
+		s_sig->SetBranchAddress("j1_e",&j1_e_);
+		s_sig->SetBranchAddress("j1_pt",&j1_pt_);
+		s_sig->SetBranchAddress("j1_phi",&j1_phi_);
+		s_sig->SetBranchAddress("j1_eta",&j1_eta_);
+		s_sig->SetBranchAddress("j1_beta",&j1_beta_);
+		s_sig->SetBranchAddress("j1_betaStar",&j1_betaStar_);
+		s_sig->SetBranchAddress("j1_betaStarClassic",&j1_betaStarClassic_);
+		s_sig->SetBranchAddress("j1_dR2Mean",&j1_dR2Mean_);
+		s_sig->SetBranchAddress("j1_algoPF1_csvBtag",&j1_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j2_e",&j2_e_);
+		s_sig->SetBranchAddress("j2_pt",&j2_pt_);
+		s_sig->SetBranchAddress("j2_phi",&j2_phi_);
+		s_sig->SetBranchAddress("j2_eta",&j2_eta_);
+		s_sig->SetBranchAddress("j2_beta",&j2_beta_);
+		s_sig->SetBranchAddress("j2_betaStar",&j2_betaStar_);
+		s_sig->SetBranchAddress("j2_betaStarClassic",&j2_betaStarClassic_);
+		s_sig->SetBranchAddress("j2_dR2Mean",&j2_dR2Mean_);
+		s_sig->SetBranchAddress("j2_algoPF1_csvBtag",&j2_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j3_e",&j3_e_);
+		s_sig->SetBranchAddress("j3_pt",&j3_pt_);
+		s_sig->SetBranchAddress("j3_phi",&j3_phi_);
+		s_sig->SetBranchAddress("j3_eta",&j3_eta_);
+		s_sig->SetBranchAddress("j3_beta",&j3_beta_);
+		s_sig->SetBranchAddress("j3_betaStar",&j3_betaStar_);
+		s_sig->SetBranchAddress("j3_betaStarClassic",&j3_betaStarClassic_);
+		s_sig->SetBranchAddress("j3_dR2Mean",&j3_dR2Mean_);
+		s_sig->SetBranchAddress("j3_algoPF1_csvBtag",&j3_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j4_e",&j4_e_);
+		s_sig->SetBranchAddress("j4_pt",&j4_pt_);
+		s_sig->SetBranchAddress("j4_phi",&j4_phi_);
+		s_sig->SetBranchAddress("j4_eta",&j4_eta_);
+		s_sig->SetBranchAddress("j4_beta",&j4_beta_);
+		s_sig->SetBranchAddress("j4_betaStar",&j4_betaStar_);
+		s_sig->SetBranchAddress("j4_betaStarClassic",&j4_betaStarClassic_);
+		s_sig->SetBranchAddress("j4_dR2Mean",&j4_dR2Mean_);
+		s_sig->SetBranchAddress("j4_algoPF1_csvBtag",&j4_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j5_e",&j5_e_);
+		s_sig->SetBranchAddress("j5_pt",&j5_pt_);
+		s_sig->SetBranchAddress("j5_phi",&j5_phi_);
+		s_sig->SetBranchAddress("j5_eta",&j5_eta_);
+		s_sig->SetBranchAddress("j5_beta",&j5_beta_);
+		s_sig->SetBranchAddress("j5_betaStar",&j5_betaStar_);
+		s_sig->SetBranchAddress("j5_betaStarClassic",&j5_betaStarClassic_);
+		s_sig->SetBranchAddress("j5_dR2Mean",&j5_dR2Mean_);
+		s_sig->SetBranchAddress("j5_algoPF1_csvBtag",&j5_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j6_e",&j6_e_);
+		s_sig->SetBranchAddress("j6_pt",&j6_pt_);
+		s_sig->SetBranchAddress("j6_phi",&j6_phi_);
+		s_sig->SetBranchAddress("j6_eta",&j6_eta_);
+		s_sig->SetBranchAddress("j6_beta",&j6_beta_);
+		s_sig->SetBranchAddress("j6_betaStar",&j6_betaStar_);
+		s_sig->SetBranchAddress("j6_betaStarClassic",&j6_betaStarClassic_);
+		s_sig->SetBranchAddress("j6_dR2Mean",&j6_dR2Mean_);
+		s_sig->SetBranchAddress("j6_algoPF1_csvBtag",&j6_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j7_e",&j7_e_);
+		s_sig->SetBranchAddress("j7_pt",&j7_pt_);
+		s_sig->SetBranchAddress("j7_phi",&j7_phi_);
+		s_sig->SetBranchAddress("j7_eta",&j7_eta_);
+		s_sig->SetBranchAddress("j7_beta",&j7_beta_);
+		s_sig->SetBranchAddress("j7_betaStar",&j7_betaStar_);
+		s_sig->SetBranchAddress("j7_betaStarClassic",&j7_betaStarClassic_);
+		s_sig->SetBranchAddress("j7_dR2Mean",&j7_dR2Mean_);
+		s_sig->SetBranchAddress("j7_algoPF1_csvBtag",&j7_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j8_e",&j8_e_);
+		s_sig->SetBranchAddress("j8_pt",&j8_pt_);
+		s_sig->SetBranchAddress("j8_phi",&j8_phi_);
+		s_sig->SetBranchAddress("j8_eta",&j8_eta_);
+		s_sig->SetBranchAddress("j8_beta",&j8_beta_);
+		s_sig->SetBranchAddress("j8_betaStar",&j8_betaStar_);
+		s_sig->SetBranchAddress("j8_betaStarClassic",&j8_betaStarClassic_);
+		s_sig->SetBranchAddress("j8_dR2Mean",&j8_dR2Mean_);
+		s_sig->SetBranchAddress("j8_algoPF1_csvBtag",&j8_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j9_e",&j9_e_);
+		s_sig->SetBranchAddress("j9_pt",&j9_pt_);
+		s_sig->SetBranchAddress("j9_phi",&j9_phi_);
+		s_sig->SetBranchAddress("j9_eta",&j9_eta_);
+		s_sig->SetBranchAddress("j9_beta",&j9_beta_);
+		s_sig->SetBranchAddress("j9_betaStar",&j9_betaStar_);
+		s_sig->SetBranchAddress("j9_betaStarClassic",&j9_betaStarClassic_);
+		s_sig->SetBranchAddress("j9_dR2Mean",&j9_dR2Mean_);
+		s_sig->SetBranchAddress("j9_algoPF1_csvBtag",&j9_algoPF1_csvBtag_);
+		s_sig->SetBranchAddress("j10_e",&j10_e_);
+		s_sig->SetBranchAddress("j10_pt",&j10_pt_);
+		s_sig->SetBranchAddress("j10_phi",&j10_phi_);
+		s_sig->SetBranchAddress("j10_eta",&j10_eta_);
+		s_sig->SetBranchAddress("j10_beta",&j10_beta_);
+		s_sig->SetBranchAddress("j10_betaStar",&j10_betaStar_);
+		s_sig->SetBranchAddress("j10_betaStarClassic",&j10_betaStarClassic_);
+		s_sig->SetBranchAddress("j10_dR2Mean",&j10_dR2Mean_);
+		s_sig->SetBranchAddress("j10_algoPF1_csvBtag",&j10_algoPF1_csvBtag_);
+ 
+		// dijet variables_;
+		s_sig->SetBranchAddress("JetsMass",&JetsMass_);
+		s_sig->SetBranchAddress("dijet_E",&dijet_E_);
+		s_sig->SetBranchAddress("dijet_Pt",&dijet_Pt_);
+		s_sig->SetBranchAddress("dijet_Eta",&dijet_Eta_);
+		s_sig->SetBranchAddress("dijet_Phi",&dijet_Phi_);
+		s_sig->SetBranchAddress("cosThetaStar",&cosThetaStar_);
+		s_sig->SetBranchAddress("category",&category_);
+		s_sig->SetBranchAddress("dipho_pt",&dipho_pt_);
+
 		
 		Int_t nentries_sig = (Int_t)s_sig->GetEntries();
 		for (Int_t i=0;i<nentries_sig;i++) {
@@ -454,33 +556,78 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 			
 			//if(!(blind2_==1)) continue;
 			if(!(mass_>100 && mass_<180)) continue;
-			if(!(electron_==1 || muon_==1)) continue;
-			if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
-			if(!(leptonPt_>10)) continue;
-			if(sample=="CS"){
-				if(electron_==1){
-					if(!(eleMVA_>0.9)) continue;
-					if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-				}
-				if(muon_==1){
-					if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-				}
+			if((sel=="cat6")||(sel=="cat7")){
+			  if(!(electron_==1 || muon_==1)) continue;
+			  if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
+			  if(!(leptonPt_>10)) continue;
+			  if(sample=="CS"){
+			    if(electron_==1){
+			      if(!(eleMVA_>0.9)) continue;
+			      if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+			    }
+			    if(muon_==1){
+			      if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+			    }
+			  }
+			  if(sample=="SS"){
+			    if(electron_==1){
+			      if(!(electron_M_lead_>10)) continue;
+			      if(!(electron_M_sublead_>10)) continue;
+			      if(!(eleMVA_>0.9)) continue;
+			    }
+			    if(!(deltaR_lead_>1.0)) continue;
+			    if(!(deltaR_sublead_>1.0)) continue;
+			    if(!(leptonPt_>20)) continue;
+			    if(sel!="both"){
+			      if(sel=="cat6") {if(!(met_>45)) continue;}
+			      if(sel=="cat7") {if(!(met_<45)) continue;}
+			    }
+			  }
+			}else if(sel=="ttHhad"){
+			  if(sample="SS"){
+			    if(category_!=10)continue;
+			  }else if(sample=="CS"){
+			    //at least three jets and 0 btag medium
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j3_pt<25.)continue;
+			    if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
+				j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
+				j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
+			  }
+			}else if (sel=="VHhadbtag"){
+			  if(sample="SS"){
+			    if(category_!=11)continue;
+			  }else if (sample="CS"){
+			    //same cut as vhhadbtag but inverted costheta
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j2_pt<27.)continue;
+			    if(j4_pt>20.)continue;
+			    if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+				 j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+				 j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+			    if(dipho_pt<117*mass/120.)continue;
+			    if(JetsMass<60. ||JetsMass>120.)continue;
+			    if(cosThetaStar<0.56)continue;
+			  }
+			}else if (sel=="VHhad0tag"){
+			  if(sample="SS"){
+			    if(category_!=12)continue;
+			  }else if (sample="CS"){
+			    //same cut as vhhadbtag but inverted costheta
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j2_pt<40.)continue;
+			    if(j4_pt>20.)continue;
+			    if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+				j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+				j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+			    if(dipho_pt<130*mass/120.)continue;
+			    if(JetsMass<60. ||JetsMass>120.)continue;
+			    if(cosThetaStar<0.50)continue;
+			  }
 			}
-			if(sample=="SS"){
-				if(electron_==1){
-					if(!(electron_M_lead_>10)) continue;
-					if(!(electron_M_sublead_>10)) continue;
-					if(!(eleMVA_>0.9)) continue;
-				}
-				if(!(deltaR_lead_>1.0)) continue;
-				if(!(deltaR_sublead_>1.0)) continue;
-				if(!(leptonPt_>20)) continue;
-				if(sel!="both"){
-					if(sel=="cat6") {if(!(met_>45)) continue;}
-					if(sel=="cat7") {if(!(met_<45)) continue;}
-				}
-			}
-			
 			wgt_sig_ = weight_;
 			diphoMVA_sig_ = diphobdt_output_;
 			mass_sig_ = mass_;

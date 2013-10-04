@@ -2,30 +2,36 @@
 
 directory=$1
 
-root -b <<EOF
-.x CreateTree.C
-CreateTree(true,"CS","VHlep1",   "mass",80,100,180)
-CreateTree(true,"CS","VHlep2",   "mass",80,100,180)
-CreateTree(true,"SS","VHlep1",   "mass",80,100,180)
-CreateTree(true,"SS","VHlep2",   "mass",80,100,180) 
-CreateTree(true,"SS","ttHhad",   "mass",80,100,180) 
-CreateTree(true,"SS","VHhadbtag","mass",80,100,180) 
-CreateTree(true,"SS","VHhad0tag","mass",80,100,180) 
-CreateTree(true,"CS","ttHhad",   "mass",80,100,180) 
-CreateTree(true,"CS","VHhadbtag","mass",80,100,180) 
-CreateTree(true,"CS","VHhad0tag","mass",80,100,180) 
-CreateTree(true,"CS","VHlep1",   "diphobdt_output",200,-1,1)
-CreateTree(true,"CS","VHlep2",   "diphobdt_output",200,-1,1)
-CreateTree(true,"SS","VHlep1",   "diphobdt_output",200,-1,1)
-CreateTree(true,"SS","VHlep2",   "diphobdt_output",200,-1,1)
-CreateTree(true,"SS","VHlep",    "diphobdt_output",200,-1,1)
-CreateTree(true,"SS","ttHhad",   "diphobdt_output",200,-1,1) 
-CreateTree(true,"SS","VHhadbtag","diphobdt_output",200,-1,1) 
-CreateTree(true,"SS","VHhad0tag","diphobdt_output",200,-1,1) 
-CreateTree(true,"CS","ttHhad",   "diphobdt_output",200,-1,1) 
-CreateTree(true,"CS","VHhadbtag","diphobdt_output",200,-1,1) 
-CreateTree(true,"CS","VHhad0tag","diphobdt_output",200,-1,1) 
+mkdir $directory
+cd $directory
+cp ../doDatacard.sh .
+cp ../CreateTree.C .
+cp ../MakeFit.cpp .
+cp ../shapeComparison.cpp .
 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHlep1\",\"mass\",80,100,180\)
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHlep2\",\"mass\",80,100,180\)
+root -l -b -q CreateTree.C+\(true,\"CS\",\"ttHhad\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHhadbtag\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHhad0tag\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHlep1\",\"mass\",80,100,180\)
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHlep2\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"ttHhad\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhadbtag\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhad0tag\",\"mass\",80,100,180\) 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHlep1\",\"diphobdt\_output\",200,-1,1\)
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHlep2\",\"diphobdt\_output\",200,-1,1\)
+root -l -b -q CreateTree.C+\(true,\"CS\",\"ttHhad\",\"diphobdt\_output\",200,-1,1\) 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHhadbtag\",\"diphobdt\_output\",200,-1,1\) 
+root -l -b -q CreateTree.C+\(true,\"CS\",\"VHhad0tag\",\"diphobdt\_output\",200,-1,1\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHlep1\",\"diphobdt\_output\",200,-1,1\)
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHlep2\",\"diphobdt\_output\",200,-1,1\)
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHlep\",\"diphobdt\_output\",200,-1,1\)
+root -l -b -q CreateTree.C+\(true,\"SS\",\"ttHhad\",\"diphobdt\_output\",200,-1,1\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhadbtag\",\"diphobdt\_output\",200,-1,1\) 
+root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhad0tag\",\"diphobdt\_output\",200,-1,1\) 
+
+root -b <<EOF
 .x MakeFit.cpp
 MakeFit(true,"VHlep1")
 MakeFit(true,"VHlep2")
@@ -41,8 +47,10 @@ shapeComparison(true,"VHhad0tag")
 
 .q
 EOF
-mkdir $directory
-mv *root $directory
-mv *dat $directory
-mv *png $directory
-mv *txt $directory
+
+mkdir datacard
+mkdir plot
+mkdir root
+mv *.dat datacard
+mv *.png plot
+mv *.root root

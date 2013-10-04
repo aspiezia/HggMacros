@@ -1,22 +1,6 @@
-#include <cstdlib>
-#include <iostream>
-#include <utility>
-#include <iomanip>
-#include <algorithm>
-#ifndef __CINT__
-#include "RooGlobalFunc.h"
-#endif#include "RooRealVar.h"
-#include "RooDataSet.h"
-#include "RooGaussian.h"
-#include "RooConstVar.h"
-#include "RooPolynomial.h"
-#include "RooKeysPdf.h"
-#include "RooNDKeysPdf.h"
-#include "RooProdPdf.h"
 #include "TCanvas.h"
 #include "TAxis.h"
 #include "TH1.h"
-#include "RooPlot.h"
 
 
 int MakeFit(bool save=false, TString sel="prova"){

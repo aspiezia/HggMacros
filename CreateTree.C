@@ -32,8 +32,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   gStyle->SetTitleY(0.96); //title Y location 
   using namespace std;
 	
-  TFile *f2 = new TFile("../ROOT/tree_legacy.root"); //DATA
-  TFile *f3 = new TFile("../ROOT/tree_legacy.root"); //SIGNAL
+  TFile *f2 = new TFile("../tree_legacy.root"); //DATA
+  TFile *f3 = new TFile("../tree_legacy.root"); //SIGNAL
 	
   //------------------------------------------- DATA -------------------------------------------//
   TTree *s_data   = (TTree*)f2->Get("Data");
@@ -151,48 +151,48 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	}
       }
     }else if(sel=="ttHhad"){
-      if(sample="SS"){
+      if(sample=="SS"){
 	if(category_!=10)continue;
       }else if(sample=="CS"){
 	//at least three jets and 0 btag medium
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
-	if(j3_pt<25.)continue;
+	if(j3_pt_<25.)continue;
 	if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
       }
     }else if (sel=="VHhadbtag"){
-      if(sample="SS"){
+      if(sample=="SS"){
 	if(category_!=11)continue;
-      }else if (sample="CS"){
+      }else if (sample=="CS"){
 	//same cut as vhhadbtag but inverted costheta
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
-	if(j2_pt<27.)continue;
-	if(j4_pt>20.)continue;
+	if(j2_pt_<27.)continue;
+	if(j4_pt_>20.)continue;
 	if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 	     j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 	     j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
-	if(dipho_pt<117*mass/120.)continue;
-	if(JetsMass<60. ||JetsMass>120.)continue;
-	if(cosThetaStar<0.56)continue;
+	if(dipho_pt_<117*mass_/120.)continue;
+	if(JetsMass_<60. ||JetsMass_>120.)continue;
+	if(cosThetaStar_<0.56)continue;
       }
     }else if (sel=="VHhad0tag"){
-      if(sample="SS"){
+      if(sample=="SS"){
 	if(category_!=12)continue;
-      }else if (sample="CS"){
+      }else if (sample=="CS"){
 	//same cut as vhhadbtag but inverted costheta
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
-	if(j2_pt<40.)continue;
-	if(j4_pt>20.)continue;
+	if(j2_pt_<40.)continue;
+	if(j4_pt_>20.)continue;
 	if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 	    j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 	    j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
-	if(dipho_pt<130*mass/120.)continue;
-	if(JetsMass<60. ||JetsMass>120.)continue;
-	if(cosThetaStar<0.50)continue;
+	if(dipho_pt_<130*mass_/120.)continue;
+	if(JetsMass_<60. ||JetsMass_>120.)continue;
+	if(cosThetaStar_<0.50)continue;
       }
     }
 
@@ -212,8 +212,6 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   treeSig.Branch("mass",&mass_sig_,"mass/F");
   treeSig.Branch("diphoMVA",&diphoMVA_sig_,"diphoMVA/F");
   treeSig.Branch("wgt",&wgt_sig_,"wgt/F");
-  vector<float> weight_sig;
-  weight_sig.clear();
   vector<TString> names_sig;
   names_sig.clear();
   names_sig.push_back("wzh_m125_8TeV");
@@ -294,48 +292,48 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  }
 	}
       }else if(sel=="ttHhad"){
-	if(sample="SS"){
+	if(sample=="SS"){
 	  if(category_!=10)continue;
 	}else if(sample=="CS"){
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j3_pt<25.)continue;
+	  if(j3_pt_<25.)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
 	}
       }else if (sel=="VHhadbtag"){
-	if(sample="SS"){
+	if(sample=="SS"){
 	  if(category_!=11)continue;
-	}else if (sample="CS"){
+	}else if (sample=="CS"){
 	  //same cut as vhhadbtag but inverted costheta
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j2_pt<27.)continue;
-	  if(j4_pt>20.)continue;
+	  if(j2_pt_<27.)continue;
+	  if(j4_pt_>20.)continue;
 	  if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 	       j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 	       j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
-	  if(dipho_pt<117*mass/120.)continue;
-	  if(JetsMass<60. ||JetsMass>120.)continue;
-	  if(cosThetaStar<0.56)continue;
+	  if(dipho_pt_<117*mass_/120.)continue;
+	  if(JetsMass_<60. ||JetsMass_>120.)continue;
+	  if(cosThetaStar_<0.56)continue;
 	}
       }else if (sel=="VHhad0tag"){
-	if(sample="SS"){
+	if(sample=="SS"){
 	  if(category_!=12)continue;
-	}else if (sample="CS"){
+	}else if (sample=="CS"){
 	  //same cut as vhhadbtag but inverted costheta
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j2_pt<40.)continue;
-	  if(j4_pt>20.)continue;
+	  if(j2_pt_<40.)continue;
+	  if(j4_pt_>20.)continue;
 	  if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
 	      j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
 	      j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
-	  if(dipho_pt<130*mass/120.)continue;
-	  if(JetsMass<60. ||JetsMass>120.)continue;
-	  if(cosThetaStar<0.50)continue;
+	  if(dipho_pt_<130*mass_/120.)continue;
+	  if(JetsMass_<60. ||JetsMass_>120.)continue;
+	  if(cosThetaStar_<0.50)continue;
 	}
       }
       wgt_sig_ = weight_;

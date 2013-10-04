@@ -31,7 +31,9 @@ CreateTree(true,"CS","VHhad0tag","diphobdt_output",200,-1,1)
 .x MakeFit.cpp
 MakeFit(true,"cat6")
 MakeFit(true,"cat7")
-
+MakeFit(true,"ttHhad")
+MakeFit(true,"VHhadbtag")
+MakeFit(true,"VHhad0tag")
 .x shapeComparison.cpp
 
 .q

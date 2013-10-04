@@ -17,7 +17,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		cout<<"You have to provide 4 arguments:"<<endl;
 		cout<<"    - boolean to save (true) or not save (false)"<<endl;
 		cout<<"    - string for the sample you want to use ('CS' or 'SS')"<<endl;
-		cout<<"    - string for the category you want to use ('cat6' or 'cat7' or 'both'): if CS leave it empty!"<<endl;
+		cout<<"    - string for the category you want to use ('cat6' or 'cat7' or 'both' or 'ttHhad' or 'VHhadbtag' or 'VHhad0tag'): if CS leave it empty!"<<endl;
 		cout<<"    - string for the name of the branch to plot/save"<<endl;
 		cout<<endl;
 		return;
@@ -50,7 +50,29 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	int blind2_;
 	int electron_; int muon_;
 	float variable_;
-	
+
+	int njets_passing_kLooseID_;
+	float j1_algoPF1_csvBtag_;
+	float j2_pt_;
+	float j2_algoPF1_csvBtag_;
+	float j3_pt_;
+	float j3_algoPF1_csvBtag_;
+	float j4_pt_;
+	float j4_algoPF1_csvBtag_;
+	float j5_algoPF1_csvBtag_;
+	float j6_algoPF1_csvBtag_;
+	float j7_algoPF1_csvBtag_;
+	float j8_algoPF1_csvBtag_;
+	float j9_algoPF1_csvBtag_;
+	float j10_algoPF1_csvBtag_;
+ 
+	// dijet variables_;
+	float JetsMass_;
+	float cosThetaStar_;
+
+	float category_;
+	float dipho_pt_;
+
 	s_data->SetBranchAddress("dataset",&dataset_);
 	s_data->SetBranchAddress("weight",&weight_);
 	s_data->SetBranchAddress("met",&met_);
@@ -71,8 +93,31 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	s_data->SetBranchAddress("blind2",&blind2_);
 	s_data->SetBranchAddress("electron",&electron_);
 	s_data->SetBranchAddress("muon",&muon_);
+	s_data->SetBranchAddress("njets_passing_kLooseID",&njets_passing_kLooseID_);
+	s_data->SetBranchAddress("j1_algoPF1_csvBtag",&j1_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j2_pt",&j2_pt_);
+	s_data->SetBranchAddress("j2_algoPF1_csvBtag",&j2_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j3_pt",&j3_pt_);
+	s_data->SetBranchAddress("j3_algoPF1_csvBtag",&j3_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j4_pt",&j4_pt_);
+	s_data->SetBranchAddress("j4_algoPF1_csvBtag",&j4_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j5_algoPF1_csvBtag",&j5_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j6_algoPF1_csvBtag",&j6_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j7_algoPF1_csvBtag",&j7_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j8_algoPF1_csvBtag",&j8_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j9_algoPF1_csvBtag",&j9_algoPF1_csvBtag_);
+	s_data->SetBranchAddress("j10_algoPF1_csvBtag",&j10_algoPF1_csvBtag_);
+ 
+	// dijet variables_;
+	s_data->SetBranchAddress("JetsMass",&JetsMass_);
+	s_data->SetBranchAddress("cosThetaStar",&cosThetaStar_);
+	s_data->SetBranchAddress("category",&category_);
+	s_data->SetBranchAddress("dipho_pt",&dipho_pt_);
+
+
+
 	
-    TH1D *h_data; h_data  = new TH1D("","",nbin,nbin_min,nbin_max); 
+	TH1D *h_data; h_data  = new TH1D("","",nbin,nbin_min,nbin_max); 
 	TTree treeDat("treeDat","treeDat");
 	float diphoMVA_dat_=-99;
 	float wgt_dat_=-99;
@@ -101,33 +146,80 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		
 		if(!(blind2_==1)) continue;
 		if(!(mass_>100 && mass_<180)) continue;
-		if(!(electron_==1 || muon_==1)) continue;
-		if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
-		if(!(leptonPt_>10)) continue;
-		if(sample=="CS"){
-			if(electron_==1){
-				if(!(eleMVA_>0.0)) continue;
-				if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-			}
-			if(muon_==1){
+
+		if((sel=="cat6")||(sel=="cat7")){
+		  if(!(electron_==1 || muon_==1)) continue;
+		  if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
+		  if(!(leptonPt_>10)) continue;
+		  if(sample=="CS"){
+		    if(electron_==1){
+		      if(!(eleMVA_>0.0)) continue;
+		      if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+		    }
+		    if(muon_==1){
 				if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-			}
+		    }
+		  }
+		  if(sample=="SS"){
+		    if(electron_==1){
+		      if(!(electron_M_lead_>10)) continue;
+		      if(!(electron_M_sublead_>10)) continue;
+		      if(!(eleMVA_>0.9)) continue;
+		    }
+		    if(!(deltaR_lead_>1.0)) continue;
+		    if(!(deltaR_sublead_>1.0)) continue;
+		    if(!(leptonPt_>20)) continue;
+		    if(sel!="both"){
+		      if(sel=="cat6") {if(!(met_>45)) continue;}
+		      if(sel=="cat7") {if(!(met_<45)) continue;}
+		    }
+		  }
+		}else if(sel=="ttHhad"){
+		  if(sample="SS"){
+		    if(category_!=10)continue;
+		  }else if(sample=="CS"){
+		    //at least three jets and 0 btag medium
+		    if(photonPT_lead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
+		    if(j3_pt<25.)continue;
+		    if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
+			 j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
+			 j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
+		  }
+		}else if (sel=="VHhadbtag"){
+		  if(sample="SS"){
+		    if(category_!=11)continue;
+		  }else if (sample="CS"){
+		    //same cut as vhhadbtag but inverted costheta
+		    if(photonPT_lead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
+		    if(j2_pt<27.)continue;
+		    if(j4_pt>20.)continue;
+		    if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+			j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+			j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+		    if(dipho_pt<117*mass/120.)continue;
+		    if(JetsMass<60. ||JetsMass>120.)continue;
+		    if(cosThetaStar<0.56)continue;
+		  }
+		}else if (sel=="VHhad0tag"){
+		  if(sample="SS"){
+		    if(category_!=12)continue;
+		  }else if (sample="CS"){
+		    //same cut as vhhadbtag but inverted costheta
+		    if(photonPT_lead_<60*mass_/120.)continue;
+		    if(photonPT_sublead_<25.)continue;
+		    if(j2_pt<40.)continue;
+		    if(j4_pt>20.)continue;
+		    if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+			j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+			j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+		    if(dipho_pt<130*mass/120.)continue;
+		    if(JetsMass<60. ||JetsMass>120.)continue;
+		    if(cosThetaStar<0.50)continue;
+		  }
 		}
-		if(sample=="SS"){
-			if(electron_==1){
-				if(!(electron_M_lead_>10)) continue;
-				if(!(electron_M_sublead_>10)) continue;
-				if(!(eleMVA_>0.9)) continue;
-			}
-			if(!(deltaR_lead_>1.0)) continue;
-			if(!(deltaR_sublead_>1.0)) continue;
-			if(!(leptonPt_>20)) continue;
-			if(sel!="both"){
-				if(sel=="cat6") {if(!(met_>45)) continue;}
-				if(sel=="cat7") {if(!(met_<45)) continue;}
-			}
-		}
-		
+
 		wgt_dat_ = weight_;
 		diphoMVA_dat_ = diphobdt_output_;
 		mass_dat_ = mass_;
@@ -158,26 +250,51 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 		h_sig[j] = new TH1D("","",nbin,nbin_min,nbin_max); 
 		s_sig->SetMakeClass(1);
 		
-		s_sig->SetBranchAddress("dataset",&dataset_);
-		s_sig->SetBranchAddress("weight",&weight_);
-		s_sig->SetBranchAddress("met",&met_);
-		s_sig->SetBranchAddress("mass",&mass_);
-		s_sig->SetBranchAddress("leptonPt",&leptonPt_);
-		s_sig->SetBranchAddress("photonPT_lead",&photonPT_lead_);
-		s_sig->SetBranchAddress("photonPT_sublead",&photonPT_sublead_);
-		s_sig->SetBranchAddress("deltaR_lead",&deltaR_lead_);
-		s_sig->SetBranchAddress("deltaR_sublead",&deltaR_sublead_);
-		s_sig->SetBranchAddress("electron_M_lead",&electron_M_lead_);
-		s_sig->SetBranchAddress("electron_M_sublead",&electron_M_sublead_);
-		s_sig->SetBranchAddress("Njet20",&Njet20_);
-		s_sig->SetBranchAddress("eleMVA",&eleMVA_);
-		s_sig->SetBranchAddress("leptonISO",&leptonISO_);
-		s_sig->SetBranchAddress("leptonD0",&leptonD0_);
-		s_sig->SetBranchAddress("leptonDZ",&leptonDZ_);
-		s_sig->SetBranchAddress("diphobdt_output",&diphobdt_output_);
-		s_sig->SetBranchAddress("blind2",&blind2_);
-		s_sig->SetBranchAddress("electron",&electron_);
-		s_sig->SetBranchAddress("muon",&muon_);
+s_sig->SetBranchAddress("dataset",&dataset_);
+	s_sig->SetBranchAddress("weight",&weight_);
+	s_sig->SetBranchAddress("met",&met_);
+	s_sig->SetBranchAddress("mass",&mass_);
+	s_sig->SetBranchAddress("leptonPt",&leptonPt_);
+	s_sig->SetBranchAddress("photonPT_lead",&photonPT_lead_);
+	s_sig->SetBranchAddress("photonPT_sublead",&photonPT_sublead_);
+	s_sig->SetBranchAddress("deltaR_lead",&deltaR_lead_);
+	s_sig->SetBranchAddress("deltaR_sublead",&deltaR_sublead_);
+	s_sig->SetBranchAddress("electron_M_lead",&electron_M_lead_);
+	s_sig->SetBranchAddress("electron_M_sublead",&electron_M_sublead_);
+	s_sig->SetBranchAddress("Njet20",&Njet20_);
+	s_sig->SetBranchAddress("eleMVA",&eleMVA_);
+	s_sig->SetBranchAddress("leptonISO",&leptonISO_);
+	s_sig->SetBranchAddress("leptonD0",&leptonD0_);
+	s_sig->SetBranchAddress("leptonDZ",&leptonDZ_);
+	s_sig->SetBranchAddress("diphobdt_output",&diphobdt_output_);
+	s_sig->SetBranchAddress("blind2",&blind2_);
+	s_sig->SetBranchAddress("electron",&electron_);
+	s_sig->SetBranchAddress("muon",&muon_);
+	s_sig->SetBranchAddress("njets_passing_kLooseID",&njets_passing_kLooseID_);
+	s_sig->SetBranchAddress("j1_algoPF1_csvBtag",&j1_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j2_pt",&j2_pt_);
+	s_sig->SetBranchAddress("j2_algoPF1_csvBtag",&j2_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j3_pt",&j3_pt_);
+	s_sig->SetBranchAddress("j3_algoPF1_csvBtag",&j3_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j4_pt",&j4_pt_);
+	s_sig->SetBranchAddress("j4_algoPF1_csvBtag",&j4_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j5_algoPF1_csvBtag",&j5_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j6_algoPF1_csvBtag",&j6_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j7_algoPF1_csvBtag",&j7_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j8_algoPF1_csvBtag",&j8_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j9_algoPF1_csvBtag",&j9_algoPF1_csvBtag_);
+	s_sig->SetBranchAddress("j10_algoPF1_csvBtag",&j10_algoPF1_csvBtag_);
+ 
+	// dijet variables_;
+	s_sig->SetBranchAddress("JetsMass",&JetsMass_);
+	s_sig->SetBranchAddress("cosThetaStar",&cosThetaStar_);
+	s_sig->SetBranchAddress("category",&category_);
+	s_sig->SetBranchAddress("dipho_pt",&dipho_pt_);
+
+
+
+
+
 		
 		Int_t nentries_sig = (Int_t)s_sig->GetEntries();
 		for (Int_t i=0;i<nentries_sig;i++) {
@@ -200,33 +317,78 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 			
 			//if(!(blind2_==1)) continue;
 			if(!(mass_>100 && mass_<180)) continue;
-			if(!(electron_==1 || muon_==1)) continue;
-			if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
-			if(!(leptonPt_>10)) continue;
-			if(sample=="CS"){
-				if(electron_==1){
-					if(!(eleMVA_>0.9)) continue;
-					if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-				}
-				if(muon_==1){
-					if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
-				}
+			if((sel=="cat6")||(sel=="cat7")){
+			  if(!(electron_==1 || muon_==1)) continue;
+			  if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
+			  if(!(leptonPt_>10)) continue;
+			  if(sample=="CS"){
+			    if(electron_==1){
+			      if(!(eleMVA_>0.9)) continue;
+			      if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+			    }
+			    if(muon_==1){
+			      if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+			    }
+			  }
+			  if(sample=="SS"){
+			    if(electron_==1){
+			      if(!(electron_M_lead_>10)) continue;
+			      if(!(electron_M_sublead_>10)) continue;
+			      if(!(eleMVA_>0.9)) continue;
+			    }
+			    if(!(deltaR_lead_>1.0)) continue;
+			    if(!(deltaR_sublead_>1.0)) continue;
+			    if(!(leptonPt_>20)) continue;
+			    if(sel!="both"){
+			      if(sel=="cat6") {if(!(met_>45)) continue;}
+			      if(sel=="cat7") {if(!(met_<45)) continue;}
+			    }
+			  }
+			}else if(sel=="ttHhad"){
+			  if(sample="SS"){
+			    if(category_!=10)continue;
+			  }else if(sample=="CS"){
+			    //at least three jets and 0 btag medium
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j3_pt<25.)continue;
+			    if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
+				j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
+				j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
+			  }
+			}else if (sel=="VHhadbtag"){
+			  if(sample="SS"){
+			    if(category_!=11)continue;
+			  }else if (sample="CS"){
+			    //same cut as vhhadbtag but inverted costheta
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j2_pt<27.)continue;
+			    if(j4_pt>20.)continue;
+			    if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+				 j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+				 j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+			    if(dipho_pt<117*mass/120.)continue;
+			    if(JetsMass<60. ||JetsMass>120.)continue;
+			    if(cosThetaStar<0.56)continue;
+			  }
+			}else if (sel=="VHhad0tag"){
+			  if(sample="SS"){
+			    if(category_!=12)continue;
+			  }else if (sample="CS"){
+			    //same cut as vhhadbtag but inverted costheta
+			    if(photonPT_lead_<60*mass_/120.)continue;
+			    if(photonPT_sublead_<25.)continue;
+			    if(j2_pt<40.)continue;
+			    if(j4_pt>20.)continue;
+			    if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+				j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+				j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+			    if(dipho_pt<130*mass/120.)continue;
+			    if(JetsMass<60. ||JetsMass>120.)continue;
+			    if(cosThetaStar<0.50)continue;
+			  }
 			}
-			if(sample=="SS"){
-				if(electron_==1){
-					if(!(electron_M_lead_>10)) continue;
-					if(!(electron_M_sublead_>10)) continue;
-					if(!(eleMVA_>0.9)) continue;
-				}
-				if(!(deltaR_lead_>1.0)) continue;
-				if(!(deltaR_sublead_>1.0)) continue;
-				if(!(leptonPt_>20)) continue;
-				if(sel!="both"){
-					if(sel=="cat6") {if(!(met_>45)) continue;}
-					if(sel=="cat7") {if(!(met_<45)) continue;}
-				}
-			}
-			
 			wgt_sig_ = weight_;
 			diphoMVA_sig_ = diphobdt_output_;
 			mass_sig_ = mass_;

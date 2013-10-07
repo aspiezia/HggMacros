@@ -34,7 +34,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	
   TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //DATA
   TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //SIGNAL
-	
+
   //------------------------------------------- DATA -------------------------------------------//
   TTree *s_data   = (TTree*)f2->Get("Data");
   s_data->SetMakeClass(1);

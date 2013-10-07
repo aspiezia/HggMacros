@@ -94,7 +94,7 @@ int MakeFit(bool save=false, TString sel="prova"){
   mass.setRange("R2",130,180); 
   model_mass.fitTo(wdata, Range("R1,R2"), Extended(kTRUE));
   RooPlot* frame_mass = mass.frame(); 
-  wdata->plotOn(frame_mass,Binning(50)); 
+  wdata->plotOn(frame_mass,Binning(80)); 
   model_mass.plotOn(frame_mass,LineColor(kBlack)); 
   model_mass.plotOn(frame_mass, Components(model_mass),LineColor(kBlack),LineStyle(kDashed));
   frame_mass->SetTitle(0);

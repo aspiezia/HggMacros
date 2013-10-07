@@ -54,6 +54,11 @@ int MakeFit(bool save=false, TString sel="prova"){
     TFile *mass_SS  = new TFile("mass_SSVHhad0tag.root");
     TFile *dipho_SS = new TFile("diphobdt_output_SSVHhad0tag.root");
   }
+  if(sel=="VHmet"){
+    TFile *mass_CS  = new TFile("mass_CSVHmet.root");
+    TFile *mass_SS  = new TFile("mass_SSVHmet.root");
+    TFile *dipho_SS = new TFile("diphobdt_output_SSVHmet.root");
+  }
   TTree *tree_mass_CS  = (TTree*)mass_CS->Get("treeDat");
   TH1F *histo_mass_CS  = (TH1F*) mass_CS->Get("DAT");
   TH1F *histo_mass_SS  = (TH1F*) mass_SS->Get("DAT");

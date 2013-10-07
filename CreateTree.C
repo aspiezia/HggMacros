@@ -32,8 +32,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   gStyle->SetTitleY(0.96); //title Y location 
   using namespace std;
 	
-  TFile *f2 = new TFile("../tree_legacy.root"); //DATA
-  TFile *f3 = new TFile("../tree_legacy.root"); //SIGNAL
+  TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //DATA
+  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //SIGNAL
 	
   //------------------------------------------- DATA -------------------------------------------//
   TTree *s_data   = (TTree*)f2->Get("Data");
@@ -42,6 +42,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   int dataset_;
   float weight_; float met_; float mass_;
   float leptonPt_; float photonPT_lead_; float photonPT_sublead_;
+  float photonETA_lead_; float photonETA_sublead_;
+  float dPhiMetGG_; float dPhiMetJet_;
   float deltaR_lead_; float deltaR_sublead_;
   float electron_M_lead_; float electron_M_sublead_;
   int Njet20_; float eleMVA_;
@@ -70,7 +72,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   float JetsMass_;
   float cosThetaStar_;
 
-  float category_;
+  int category_;
   float dipho_pt_;
 
   s_data->SetBranchAddress("dataset",&dataset_);
@@ -80,6 +82,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   s_data->SetBranchAddress("leptonPt",&leptonPt_);
   s_data->SetBranchAddress("photonPT_lead",&photonPT_lead_);
   s_data->SetBranchAddress("photonPT_sublead",&photonPT_sublead_);
+  s_data->SetBranchAddress("photonETA_lead",&photonETA_lead_);
+  s_data->SetBranchAddress("photonETA_sublead",&photonETA_sublead_);
+  s_data->SetBranchAddress("dPhiMetGG",&dPhiMetGG_);
+  s_data->SetBranchAddress("dPhiMetJet",&dPhiMetJet_);
   s_data->SetBranchAddress("deltaR_lead",&deltaR_lead_);
   s_data->SetBranchAddress("deltaR_sublead",&deltaR_sublead_);
   s_data->SetBranchAddress("electron_M_lead",&electron_M_lead_);
@@ -132,19 +138,21 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     if(!(blind2_==1)) continue;
     if(!(mass_>100 && mass_<180)) continue;
 
-    if((sel=="VHlep1")||(sel=="VHlep2")){
+    if((sel=="VHlep1")||(sel=="VHlep2")||(sel=="VHlep")){
       if(sample=="SS"){
-	  if(sel=="VHlep1") {if(category_!=6) continue;}
-	  if(sel=="VHlep2") {if(category_!=7) continue;}
-	  if(sel=="VHlep")  {if(!(category_==6 || category_==7)) continue;}
+	if(sel=="VHlep1") {if(category_!=7) continue;}
+	if(sel=="VHlep2") {if(category_!=8) continue;}
+	if(sel=="VHlep")  {if(!(category_==7 || category_==8)) continue;}
       }
       if(sample=="CS"){
 	if(!(electron_==1 || muon_==1)) continue;
 	if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
-	if(!(leptonPt_>10)) continue;
+	if(!(leptonPt_>20)) continue;
 	if(electron_==1){
 	  if(!(eleMVA_>0.0)) continue;
-	  if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+	  if(!(electron_M_lead_>3)) continue;
+	  if(!(electron_M_sublead_>3)) continue;
+	  if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0 || eleMVA_<0.9)) continue;
 	}
 	if(muon_==1){
 	  if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
@@ -152,19 +160,20 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       }
     }else if(sel=="ttHhad"){
       if(sample=="SS"){
-	if(category_!=10)continue;
+	if(category_!=11)continue;
       }else if(sample=="CS"){
 	//at least three jets and 0 btag medium
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
 	if(j3_pt_<25.)continue;
+	if(dipho_pt_<50)continue;
 	if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
       }
     }else if (sel=="VHhadbtag"){
       if(sample=="SS"){
-	if(category_!=11)continue;
+	if(category_!=12)continue;
       }else if (sample=="CS"){
 	//same cut as vhhadbtag but inverted costheta
 	if(photonPT_lead_<60*mass_/120.)continue;
@@ -180,7 +189,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       }
     }else if (sel=="VHhad0tag"){
       if(sample=="SS"){
-	if(category_!=12)continue;
+	if(category_!=13)continue;
       }else if (sample=="CS"){
 	//same cut as vhhadbtag but inverted costheta
 	if(photonPT_lead_<60*mass_/120.)continue;
@@ -194,8 +203,18 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	if(JetsMass_<60. ||JetsMass_>120.)continue;
 	if(cosThetaStar_<0.50)continue;
       }
+    }else if (sel=="VHmet"){
+      if(sample=="SS"){
+	if(category_!=9) continue;
+      }
+      if(sample=="CS"){
+	if(!(photonETA_lead_<1.5 && photonETA_sublead_<1.5)) continue;
+	if(!(dPhiMetGG_>2.1)) continue;
+	if(!(dPhiMetJet_<2.7)) continue;
+	if(!(met_>67 && met_<70)) continue;
+      }
     }
-
+    
     wgt_dat_ = weight_;
     diphoMVA_dat_ = diphobdt_output_;
     mass_dat_ = mass_;
@@ -214,10 +233,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   treeSig.Branch("wgt",&wgt_sig_,"wgt/F");
   vector<TString> names_sig;
   names_sig.clear();
-  names_sig.push_back("wzh_m125_8TeV");
-  names_sig.push_back("vbf_m125_8TeV");
+  names_sig.push_back("wzh_m124_8TeV");
+  names_sig.push_back("vbf_m124_8TeV");
   names_sig.push_back("tth_m125_8TeV");
-  names_sig.push_back("ggh_m125_8TeV");
+  names_sig.push_back("ggh_m124_8TeV");
   TH1D *h_sig[4]; 
   for(unsigned int j=0; j<4; j++){
     TTree *s_sig   = (TTree*)f3->Get(names_sig[j]);
@@ -231,6 +250,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     s_sig->SetBranchAddress("leptonPt",&leptonPt_);
     s_sig->SetBranchAddress("photonPT_lead",&photonPT_lead_);
     s_sig->SetBranchAddress("photonPT_sublead",&photonPT_sublead_);
+    s_sig->SetBranchAddress("photonETA_lead",&photonETA_lead_);
+    s_sig->SetBranchAddress("photonETA_sublead",&photonETA_sublead_);
+    s_sig->SetBranchAddress("dPhiMetGG",&dPhiMetGG_);
+    s_sig->SetBranchAddress("dPhiMetJet",&dPhiMetJet_);
     s_sig->SetBranchAddress("deltaR_lead",&deltaR_lead_);
     s_sig->SetBranchAddress("deltaR_sublead",&deltaR_sublead_);
     s_sig->SetBranchAddress("electron_M_lead",&electron_M_lead_);
@@ -273,19 +296,21 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       //if(!(blind2_==1)) continue;
       if(!(mass_>100 && mass_<180)) continue;
       
-      if((sel=="VHlep1")||(sel=="VHlep2")){
+      if((sel=="VHlep1")||(sel=="VHlep2")||(sel=="VHlep")){
 	if(sample=="SS"){
-	  if(sel=="VHlep1") {if(category_!=6) continue;}
-	  if(sel=="VHlep2") {if(category_!=7) continue;}
-	  if(sel=="VHlep")  {if(!(category_==6 || category_==7)) continue;}
+	  if(sel=="VHlep1") {if(category_!=7) continue;}
+	  if(sel=="VHlep2") {if(category_!=8) continue;}
+	  if(sel=="VHlep")  {if(!(category_==7 || category_==8)) continue;}
 	}
 	if(sample=="CS"){
 	  if(!(electron_==1 || muon_==1)) continue;
 	  if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
-	  if(!(leptonPt_>10)) continue;
+	  if(!(leptonPt_>20)) continue;
 	  if(electron_==1){
 	    if(!(eleMVA_>0.0)) continue;
-	    if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+	    if(!(electron_M_lead_>3)) continue;
+	    if(!(electron_M_sublead_>3)) continue;
+	    if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0 || eleMVA_<0.9)) continue;
 	  }
 	  if(muon_==1){
 	    if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
@@ -293,19 +318,20 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	}
       }else if(sel=="ttHhad"){
 	if(sample=="SS"){
-	  if(category_!=10)continue;
+	  if(category_!=11)continue;
 	}else if(sample=="CS"){
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
 	  if(j3_pt_<25.)continue;
+	  if(dipho_pt_<50)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
 	}
       }else if (sel=="VHhadbtag"){
 	if(sample=="SS"){
-	  if(category_!=11)continue;
+	  if(category_!=12)continue;
 	}else if (sample=="CS"){
 	  //same cut as vhhadbtag but inverted costheta
 	  if(photonPT_lead_<60*mass_/120.)continue;
@@ -321,7 +347,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	}
       }else if (sel=="VHhad0tag"){
 	if(sample=="SS"){
-	  if(category_!=12)continue;
+	  if(category_!=13)continue;
 	}else if (sample=="CS"){
 	  //same cut as vhhadbtag but inverted costheta
 	  if(photonPT_lead_<60*mass_/120.)continue;
@@ -335,7 +361,18 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  if(JetsMass_<60. ||JetsMass_>120.)continue;
 	  if(cosThetaStar_<0.50)continue;
 	}
+      }else if (sel=="VHmet"){
+	if(sample=="SS"){
+	  if(category_!=9) continue;
+	}
+	if(sample=="CS"){
+	  if(!(photonETA_lead_<1.5 && photonETA_sublead_<1.5)) continue;
+	  if(!(dPhiMetGG_>2.1)) continue;
+	  if(!(dPhiMetJet_<2.7)) continue;
+	  if(!(met_>67 && met_<70)) continue;
+	}
       }
+      
       wgt_sig_ = weight_;
       diphoMVA_sig_ = diphobdt_output_;
       mass_sig_ = mass_;

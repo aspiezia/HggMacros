@@ -1,23 +1,3 @@
-#include <cstdlib>
-#include <iostream>
-#include <utility>
-#include <iomanip>
-#include <algorithm>
-#ifndef __CINT__
-#include "RooGlobalFunc.h"
-#endif#include "RooRealVar.h"
-#include "RooDataSet.h"
-#include "RooGaussian.h"
-#include "RooConstVar.h"
-#include "RooPolynomial.h"
-#include "RooKeysPdf.h"
-#include "RooNDKeysPdf.h"
-#include "RooProdPdf.h"
-#include "TCanvas.h"
-#include "TAxis.h"
-#include "TH1.h"
-#include "RooPlot.h"
-
 
 int shapeComparison(bool save=false, TString sel="prova"){
   if(sel=="prova"){
@@ -61,6 +41,10 @@ int shapeComparison(bool save=false, TString sel="prova"){
   if(sel=="VHhad0tag"){
     TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHhad0tag.root");
     TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHhad0tag.root");
+  }
+  if(sel=="VHmet"){
+    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHmet.root");
+    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHmet.root");
   }
   TTree *tree_diphotonMVA_CS  = (TTree*)diphotonMVA_CS->Get("treeDat");
   TTree *tree_diphotonMVA_SS  = (TTree*)diphotonMVA_SS->Get("treeDat");
@@ -115,7 +99,7 @@ int shapeComparison(bool save=false, TString sel="prova"){
   TH1F *histo0 = (TH1F*) diphotonMVA_SS->Get("DAT"); 
   TH1F *histo2 = (TH1F*) diphotonMVA_CS->Get("DAT"); 
   float integralCS = histo2->Integral();
-  cout<<histo0->Integral()<<" "<<histo2->Integral()<<endl;
+
   histo0->Sumw2();
   histo2->Sumw2();
 	
@@ -140,12 +124,20 @@ int shapeComparison(bool save=false, TString sel="prova"){
   histo2->SetMarkerStyle(21);
   histo2->SetMarkerColor(2);
 	
-  histo0->GetYaxis()->SetRangeUser(0,0.4);
+  histo0->GetYaxis()->SetRangeUser(0.0000001,0.8);
   histo0->SetTitle(0);
   histo0->GetXaxis()->SetTitle("diphoton MVA");
   histo0->GetYaxis()->SetTitle("Events");
 	
   frame->Draw("same");
-  if(save) c->SaveAs("ShapeComparison.png");
+  
+  TLegend *pl = new TLegend(0.70,0.73,0.89,0.89);
+  pl->SetTextSize(0.05); 
+  pl->SetFillColor(0);
+  TLegendEntry *ple = pl->AddEntry(histo0, "SS",  "L"); 
+  ple = pl->AddEntry(histo2, "CS",  "L"); 
+  pl->Draw();
+  
+  if(save) c->SaveAs("ShapeComparison_"+sel+".png");
 }
 

@@ -119,6 +119,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   s_data->SetBranchAddress("dipho_pt",&dipho_pt_);
 
 
+  TString rootfile_name = variable_string+"_"+sample+sel+".root";
+  TFile fileTosave(rootfile_name,"recreate"); 
 
 	
   TH1D *h_data; h_data  = new TH1D("","",nbin,nbin_min,nbin_max); 
@@ -166,7 +168,6 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
 	if(j3_pt_<25.)continue;
-	if(dipho_pt_<50)continue;
 	if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -418,8 +419,6 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 
 	
   if(save){
-    TString rootfile_name = variable_string+"_"+sample+sel+".root";
-    TFile fileTosave(rootfile_name,"recreate"); 
     DAT->Write();
     SIG->Write();
     treeSig.Write();

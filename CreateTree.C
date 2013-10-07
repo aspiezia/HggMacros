@@ -17,7 +17,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     cout<<"You have to provide 4 arguments:"<<endl;
     cout<<"    - boolean to save (true) or not save (false)"<<endl;
     cout<<"    - string for the sample you want to use ('CS' or 'SS')"<<endl;
-    cout<<"    - string for the category you want to use ('VHlep1' or 'VHlep2' or 'VHlep' or 'ttHhad' or 'VHhadbtag' or 'VHhad0tag')"<<endl;
+    cout<<"    - string for the category you want to use ('VHlep1' or 'VHlep2' or 'VHlep' or 'ttHhad' or 'VHhadB' or 'VHhad0')"<<endl;
     cout<<"    - string for the name of the branch to plot/save"<<endl;
     cout<<endl;
     return;
@@ -171,7 +171,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
       }
-    }else if (sel=="VHhadbtag"){
+    }else if (sel=="VHhadB"){
       if(sample=="SS"){
 	if(category_!=12)continue;
       }else if (sample=="CS"){
@@ -187,7 +187,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	if(JetsMass_<60. ||JetsMass_>120.)continue;
 	if(cosThetaStar_<0.56)continue;
       }
-    }else if (sel=="VHhad0tag"){
+    }else if (sel=="VHhad0"){
       if(sample=="SS"){
 	if(category_!=13)continue;
       }else if (sample=="CS"){
@@ -203,7 +203,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	if(JetsMass_<60. ||JetsMass_>120.)continue;
 	if(cosThetaStar_<0.50)continue;
       }
-    }else if (sel=="VHmet"){
+    }else if (sel=="VHmetT"){
       if(sample=="SS"){
 	if(category_!=9) continue;
       }
@@ -233,10 +233,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   treeSig.Branch("wgt",&wgt_sig_,"wgt/F");
   vector<TString> names_sig;
   names_sig.clear();
-  names_sig.push_back("wzh_m124_8TeV");
-  names_sig.push_back("vbf_m124_8TeV");
+  names_sig.push_back("wzh_m125_8TeV");
+  names_sig.push_back("vbf_m125_8TeV");
   names_sig.push_back("tth_m125_8TeV");
-  names_sig.push_back("ggh_m124_8TeV");
+  names_sig.push_back("ggh_m125_8TeV");
   TH1D *h_sig[4]; 
   for(unsigned int j=0; j<4; j++){
     TTree *s_sig   = (TTree*)f3->Get(names_sig[j]);
@@ -329,7 +329,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
 	}
-      }else if (sel=="VHhadbtag"){
+      }else if (sel=="VHhadB"){
 	if(sample=="SS"){
 	  if(category_!=12)continue;
 	}else if (sample=="CS"){
@@ -345,7 +345,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  if(JetsMass_<60. ||JetsMass_>120.)continue;
 	  if(cosThetaStar_<0.56)continue;
 	}
-      }else if (sel=="VHhad0tag"){
+      }else if (sel=="VHhad0"){
 	if(sample=="SS"){
 	  if(category_!=13)continue;
 	}else if (sample=="CS"){
@@ -361,7 +361,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  if(JetsMass_<60. ||JetsMass_>120.)continue;
 	  if(cosThetaStar_<0.50)continue;
 	}
-      }else if (sel=="VHmet"){
+      }else if (sel=="VHmetT"){
 	if(sample=="SS"){
 	  if(category_!=9) continue;
 	}

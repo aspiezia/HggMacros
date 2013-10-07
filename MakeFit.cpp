@@ -44,20 +44,20 @@ int MakeFit(bool save=false, TString sel="prova"){
     TFile *mass_SS  = new TFile("mass_SSttHhad.root");
     TFile *dipho_SS = new TFile("diphobdt_output_SSttHhad.root");
   }
-  if(sel=="VHhadBtag"){
-    TFile *mass_CS  = new TFile("mass_CSVHhadBtag.root");
-    TFile *mass_SS  = new TFile("mass_SSVHhadBtag.root");
-    TFile *dipho_SS = new TFile("diphobdt_output_SSVHhadBtag.root");
+  if(sel=="VHhadB"){
+    TFile *mass_CS  = new TFile("mass_CSVHhadB.root");
+    TFile *mass_SS  = new TFile("mass_SSVHhadB.root");
+    TFile *dipho_SS = new TFile("diphobdt_output_SSVHhadB.root");
   }
-  if(sel=="VHhad0tag"){
-    TFile *mass_CS  = new TFile("mass_CSVHhad0tag.root");
-    TFile *mass_SS  = new TFile("mass_SSVHhad0tag.root");
-    TFile *dipho_SS = new TFile("diphobdt_output_SSVHhad0tag.root");
+  if(sel=="VHhad0"){
+    TFile *mass_CS  = new TFile("mass_CSVHhad0.root");
+    TFile *mass_SS  = new TFile("mass_SSVHhad0.root");
+    TFile *dipho_SS = new TFile("diphobdt_output_SSVHhad0.root");
   }
-  if(sel=="VHmet"){
-    TFile *mass_CS  = new TFile("mass_CSVHmet.root");
-    TFile *mass_SS  = new TFile("mass_SSVHmet.root");
-    TFile *dipho_SS = new TFile("diphobdt_output_SSVHmet.root");
+  if(sel=="VHmetT"){
+    TFile *mass_CS  = new TFile("mass_CSVHmetT.root");
+    TFile *mass_SS  = new TFile("mass_SSVHmetT.root");
+    TFile *dipho_SS = new TFile("diphobdt_output_SSVHmetT.root");
   }
   TTree *tree_mass_CS  = (TTree*)mass_CS->Get("treeDat");
   TH1F *histo_mass_CS  = (TH1F*) mass_CS->Get("DAT");

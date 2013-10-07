@@ -1,4 +1,4 @@
-void print(TString sel="prova"){
+void print(string sel="prova"){
   if(sel=="prova") return;
   gROOT->Reset();
   gStyle->SetCanvasColor(0);
@@ -21,7 +21,8 @@ void print(TString sel="prova"){
   cout<<"if(sel==\""<<sel<<"\") {"<<endl;
   cout<<"	Double_t x_erlow[n] = {";
   i=0;
-  fd=fopen(sel+".txt", "r");
+  sel=sel+".txt";
+  fd=fopen(sel.c_str(), "r");
   if( fd==NULL ) {
     perror("Errore in apertura del file");
     exit(1);
@@ -44,7 +45,7 @@ void print(TString sel="prova"){
   
   cout<<"	Double_t x_erhig[n] = {";
   i=1;
-  fd=fopen(sel+".txt", "r");
+  fd=fopen(sel.c_str(), "r");
   if( fd==NULL ) {
     perror("Errore in apertura del file");
     exit(1);

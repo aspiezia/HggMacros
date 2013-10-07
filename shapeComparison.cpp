@@ -34,17 +34,17 @@ int shapeComparison(bool save=false, TString sel="prova"){
     TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSttHhad.root");
     TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSttHhad.root");
   }
-  if(sel=="VHhadBtag"){
-    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHhadBtag.root");
-    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHhadBtag.root");
+  if(sel=="VHhadB"){
+    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHhadB.root");
+    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHhadB.root");
   }
-  if(sel=="VHhad0tag"){
-    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHhad0tag.root");
-    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHhad0tag.root");
+  if(sel=="VHhad0"){
+    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHhad0.root");
+    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHhad0.root");
   }
-  if(sel=="VHmet"){
-    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHmet.root");
-    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHmet.root");
+  if(sel=="VHmetT"){
+    TFile *diphotonMVA_CS  = new TFile("diphobdt_output_CSVHmetT.root");
+    TFile *diphotonMVA_SS  = new TFile("diphobdt_output_SSVHmetT.root");
   }
   TTree *tree_diphotonMVA_CS  = (TTree*)diphotonMVA_CS->Get("treeDat");
   TTree *tree_diphotonMVA_SS  = (TTree*)diphotonMVA_SS->Get("treeDat");

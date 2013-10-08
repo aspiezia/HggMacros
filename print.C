@@ -16,7 +16,6 @@ void print(string sel="prova"){
   int i=1;
 
   
-  cout<<"}"<<endl;
   cout<<"//"<<sel<<endl;
   cout<<"if(sel==\""<<sel<<"\") {"<<endl;
   cout<<"	Double_t x_erlow[n] = {";
@@ -59,7 +58,7 @@ void print(string sel="prova"){
     fscanf(fd, "%c%c%c%c%c%c%c%c",&x9,&x10,&x11,&x12,&x13,&x14,&x15,&x16);
     fscanf(fd, "%c%c%c%c%c%c%c%c",&x17,&x18,&x19,&x20,&x21,&x22,&x23,&x24);
     fscanf(fd, "%f%c%f%c%c%f",&x25,&x26,&x27,&x28,&x29,&x30);
-    if(i<19)cout<<x30<<",";
+    if(i<20)cout<<x30<<",";
     else {
       cout<<x30<<"};"<<endl;
       break;

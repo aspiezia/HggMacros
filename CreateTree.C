@@ -221,7 +221,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     mass_dat_ = mass_;
     treeDat.Fill();
     h_data->Fill(variable_,weight_);
-    h_data->Sumw2();
+    //h_data->Sumw2();
   }
 	
   //------------------------------------------- SIGNAL -------------------------------------------//
@@ -382,16 +382,207 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       h_sig[j]->Sumw2();
     }
   }
+    
+    
+  //------------------------------------------- BKG -------------------------------------------//
+  TTree treeBkg("treeBkg","treeBkg");
+  float diphoMVA_bkg_=-99;
+  float wgt_bkg_=-99;
+  float mass_bkg_=-99;
+  treeBkg.Branch("mass",&mass_bkg_,"mass/F");
+  treeBkg.Branch("diphoMVA",&diphoMVA_bkg_,"diphoMVA/F");
+  treeBkg.Branch("wgt",&wgt_bkg_,"wgt/F");
+  vector <TString> names_bkg;
+  names_bkg.clear();
+  names_bkg.push_back("diphojet_sherpa_8TeV");
+  names_bkg.push_back("gjet_20_8TeV_pf");
+  //names_bkg.push_back("gjet_40_8TeV_pf");
+  names_bkg.push_back("qcd_30_8TeV_ff");
+  names_bkg.push_back("qcd_30_8TeV_pf");
+  names_bkg.push_back("DYJetsToLL");
+  names_bkg.push_back("ZGToLLG");
+  names_bkg.push_back("WGToLNuG");
+  names_bkg.push_back("ZGToLLG");
+  names_bkg.push_back("WWJetsTo2L2Nu");
+  names_bkg.push_back("WZJetsTo3LNu");
+  names_bkg.push_back("ZZJetsTo2L2Nu");
+  names_bkg.push_back("ZZJetsTo2L2Q");
+  names_bkg.push_back("ZZJetsTo4L");
+  names_bkg.push_back("Wpgg_dR02");
+  names_bkg.push_back("Wmgg_dR02");
+  names_bkg.push_back("Zgg_dR02");
+  names_bkg.push_back("ttgg_dR02");
+  const int Nbkg = names_bkg.size();
+  TH1D *h_bkg[Nbkg];
+  for(unsigned int j=0; j<names_bkg.size(); j++){
+    TTree *s_bkg   = (TTree*)f2->Get(names_bkg[j]);
+    h_bkg[j] = new TH1D("","",nbin,nbin_min,nbin_max); 
+    s_bkg->SetMakeClass(1);
+		
+    s_bkg->SetBranchAddress("dataset",&dataset_);
+    s_bkg->SetBranchAddress("weight",&weight_);
+    s_bkg->SetBranchAddress("met",&met_);
+    s_bkg->SetBranchAddress("mass",&mass_);
+    s_bkg->SetBranchAddress("leptonPt",&leptonPt_);
+    s_bkg->SetBranchAddress("photonPT_lead",&photonPT_lead_);
+    s_bkg->SetBranchAddress("photonPT_sublead",&photonPT_sublead_);
+    s_bkg->SetBranchAddress("photonETA_lead",&photonETA_lead_);
+    s_bkg->SetBranchAddress("photonETA_sublead",&photonETA_sublead_);
+    s_bkg->SetBranchAddress("dPhiMetGG",&dPhiMetGG_);
+    s_bkg->SetBranchAddress("dPhiMetJet",&dPhiMetJet_);
+    s_bkg->SetBranchAddress("deltaR_lead",&deltaR_lead_);
+    s_bkg->SetBranchAddress("deltaR_sublead",&deltaR_sublead_);
+    s_bkg->SetBranchAddress("electron_M_lead",&electron_M_lead_);
+    s_bkg->SetBranchAddress("electron_M_sublead",&electron_M_sublead_);
+    s_bkg->SetBranchAddress("Njet20",&Njet20_);
+    s_bkg->SetBranchAddress("eleMVA",&eleMVA_);
+    s_bkg->SetBranchAddress("leptonISO",&leptonISO_);
+    s_bkg->SetBranchAddress("leptonD0",&leptonD0_);
+    s_bkg->SetBranchAddress("leptonDZ",&leptonDZ_);
+    s_bkg->SetBranchAddress("diphobdt_output",&diphobdt_output_);
+    s_bkg->SetBranchAddress("blind2",&blind2_);
+    s_bkg->SetBranchAddress("electron",&electron_);
+    s_bkg->SetBranchAddress("muon",&muon_);
+    s_bkg->SetBranchAddress("njets_passing_kLooseID",&njets_passing_kLooseID_);
+    s_bkg->SetBranchAddress("j1_algoPF1_csvBtag",&j1_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j2_pt",&j2_pt_);
+    s_bkg->SetBranchAddress("j2_algoPF1_csvBtag",&j2_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j3_pt",&j3_pt_);
+    s_bkg->SetBranchAddress("j3_algoPF1_csvBtag",&j3_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j4_pt",&j4_pt_);
+    s_bkg->SetBranchAddress("j4_algoPF1_csvBtag",&j4_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j5_algoPF1_csvBtag",&j5_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j6_algoPF1_csvBtag",&j6_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j7_algoPF1_csvBtag",&j7_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j8_algoPF1_csvBtag",&j8_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j9_algoPF1_csvBtag",&j9_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("j10_algoPF1_csvBtag",&j10_algoPF1_csvBtag_);
+    s_bkg->SetBranchAddress("JetsMass",&JetsMass_);
+    s_bkg->SetBranchAddress("cosThetaStar",&cosThetaStar_);
+    s_bkg->SetBranchAddress("category",&category_);
+    s_bkg->SetBranchAddress("dipho_pt",&dipho_pt_);
+
+		
+    Int_t nentries_bkg = (Int_t)s_bkg->GetEntries();
+    for (Int_t i=0;i<nentries_bkg;i++) {
+      s_bkg->GetEntry(i);
+      if(variable_string=="mass")               variable_ = mass_;
+      if(variable_string=="diphobdt_output")    variable_ = diphobdt_output_; 
+			
+      //if(!(blind2_==1)) continue;
+      if(!(mass_>100 && mass_<180)) continue;
+      
+      if((sel=="VHlep1")||(sel=="VHlep2")||(sel=="VHlep")){
+	if(sample=="SS"){
+	  if(sel=="VHlep1") {if(category_!=7) continue;}
+	  if(sel=="VHlep2") {if(category_!=8) continue;}
+	  if(sel=="VHlep")  {if(!(category_==7 || category_==8)) continue;}
+	}
+	if(sample=="CS"){
+	  if(!(electron_==1 || muon_==1)) continue;
+	  if(!(deltaR_lead_>0.5 && deltaR_sublead_>0.5)) continue;
+	  if(!(leptonPt_>20)) continue;
+	  if(electron_==1){
+	    if(!(eleMVA_>0.0)) continue;
+	    if(!(electron_M_lead_>3)) continue;
+	    if(!(electron_M_sublead_>3)) continue;
+	    if(!(electron_M_lead_<10 || electron_M_sublead_<10 || deltaR_lead_<1.0 || deltaR_sublead_<1.0 || eleMVA_<0.9)) continue;
+	  }
+	  if(muon_==1){
+	    if(!(deltaR_lead_<1.0 || deltaR_sublead_<1.0)) continue;
+	  }
+	}
+      }else if(sel=="ttHhad"){
+	if(sample=="SS"){
+	  if(category_!=11)continue;
+	}else if(sample=="CS"){
+	  //at least three jets and 0 btag medium
+	  if(photonPT_lead_<60*mass_/120.)continue;
+	  if(photonPT_sublead_<25.)continue;
+	  if(j3_pt_<25.)continue;
+	  if(dipho_pt_<50)continue;
+	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
+	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
+	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
+	}
+      }else if (sel=="VHhadB"){
+	if(sample=="SS"){
+	  if(category_!=12)continue;
+	}else if (sample=="CS"){
+	  //same cut as vhhadbtag but inverted costheta
+	  if(photonPT_lead_<60*mass_/120.)continue;
+	  if(photonPT_sublead_<25.)continue;
+	  if(j2_pt_<27.)continue;
+	  if(j4_pt_>20.)continue;
+	  if(!(j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+	       j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+	       j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+	  if(dipho_pt_<117*mass_/120.)continue;
+	  if(JetsMass_<60. ||JetsMass_>120.)continue;
+	  if(cosThetaStar_<0.56)continue;
+	}
+      }else if (sel=="VHhad0"){
+	if(sample=="SS"){
+	  if(category_!=13)continue;
+	}else if (sample=="CS"){
+	  //same cut as vhhadbtag but inverted costheta
+	  if(photonPT_lead_<60*mass_/120.)continue;
+	  if(photonPT_sublead_<25.)continue;
+	  if(j2_pt_<40.)continue;
+	  if(j4_pt_>20.)continue;
+	  if((j1_algoPF1_csvBtag_>0.244 || j2_algoPF1_csvBtag_>0.244 || j3_algoPF1_csvBtag_>0.244 ||j4_algoPF1_csvBtag_>0.244||
+	      j5_algoPF1_csvBtag_>0.244 || j6_algoPF1_csvBtag_>0.244 || j7_algoPF1_csvBtag_>0.244 ||j8_algoPF1_csvBtag_>0.244||
+	      j9_algoPF1_csvBtag_>0.244 || j10_algoPF1_csvBtag_>0.244))continue;
+	  if(dipho_pt_<130*mass_/120.)continue;
+	  if(JetsMass_<60. ||JetsMass_>120.)continue;
+	  if(cosThetaStar_<0.50)continue;
+	}
+      }else if (sel=="VHmetT"){
+	if(sample=="SS"){
+	  if(category_!=9) continue;
+	}
+	if(sample=="CS"){
+	  if(!(photonETA_lead_<1.5 && photonETA_sublead_<1.5)) continue;
+	  if(!(dPhiMetGG_>2.1)) continue;
+	  if(!(dPhiMetJet_<2.7)) continue;
+	  if(!(met_>67 && met_<70)) continue;
+	}
+      }
+      
+      wgt_bkg_ = weight_;
+      diphoMVA_bkg_ = diphobdt_output_;
+      mass_bkg_ = mass_;
+      treeBkg.Fill();
+      h_bkg[j]->Fill(variable_,weight_);
+      h_bkg[j]->Sumw2();
+    }
+  }   
 	
   TH1D *DAT  = new TH1D("DAT","DAT",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
   TH1D *SIG  = new TH1D("SIG","SIG",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
+  TH1D *BKG  = new TH1D("BKG","BKG",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
+  TH1D *ERR  = new TH1D("ERR","ERR",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
   for(int m=1; m<h_data->GetNbinsX()+1; m++){
     DAT->SetBinContent(m,h_data->GetBinContent(m));
     SIG->SetBinContent(m,h_sig[0]->GetBinContent(m)+h_sig[1]->GetBinContent(m)+h_sig[2]->GetBinContent(m)+h_sig[3]->GetBinContent(m));
     SIG->SetBinError(m,sqrt(h_sig[0]->GetBinError(m)*h_sig[0]->GetBinError(m)+h_sig[1]->GetBinError(m)*h_sig[1]->GetBinError(m)+
 			    h_sig[2]->GetBinError(m)*h_sig[2]->GetBinError(m)+h_sig[3]->GetBinError(m)*h_sig[3]->GetBinError(m)));
+    float bkg=0; float err_bkg=0;
+    for(unsigned int j=0; j<names_bkg.size(); j++){
+      bkg = bkg + h_bkg[j]->GetBinContent(m);
+      err_bkg = err_bkg + h_bkg[j]->GetBinError(m)*h_bkg[j]->GetBinError(m);
+    }
+    BKG->SetBinContent(m,bkg);
+    BKG->SetBinError(m,sqrt(err_bkg));
+    ERR->SetBinContent(m,bkg);
+    ERR->SetBinError(m,sqrt(err_bkg));
   }	
-    
+  
+  ERR->SetFillStyle(3005);
+  ERR->SetFillColor(12);
+  ERR->SetLineColor(12);
+  BKG->SetLineColor(1);
+  BKG->SetLineWidth(2);
   DAT->SetLineColor(kBlue);
   DAT->SetLineWidth(2);
   SIG->SetLineColor(kRed);
@@ -400,6 +591,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   TCanvas * c1 = new TCanvas("c1", "c1", 800, 600);
   DAT->Draw("E");
   SIG->Draw("histo same");
+  BKG->Draw("histo same");
+  ERR->Draw("E2same");
 	
   DAT->GetXaxis()->SetTitle(0);
   DAT->GetYaxis()->SetTitle("Events");
@@ -408,7 +601,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   DAT->GetYaxis()->SetLabelSize(0.045);
   DAT->GetXaxis()->SetLabelSize(0.045);
   DAT->GetYaxis()->SetTitleOffset(1);
-  DAT->SetTitle("Diphoton MVA output");
+  if(variable_string=="mass")            DAT->SetTitle("M(#gamma,#gamma)");
+  if(variable_string=="diphobdt_output") DAT->SetTitle("Diphoton MVA output");
   DAT->SetMinimum(0);
 	
   TLatex latexLabel2;
@@ -421,6 +615,9 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   if(save){
     DAT->Write();
     SIG->Write();
+    BKG->Write();
+    ERR->Write();
+    treeBkg.Write();
     treeSig.Write();
     treeDat.Write();
   }

@@ -3,12 +3,13 @@
 #include "TH1.h"
 
 
-int MakeFit(bool save=false, TString sel="prova"){
+int MakeFit(bool save=false, TString sel="prova", bool sideband=false){
   if(sel=="prova"){
     cout<<endl;
-    cout<<"You have to provide 2 arguments:"<<endl;
+    cout<<"You have to provide 3 arguments:"<<endl;
     cout<<"    - boolean to save (true) or not save (false)"<<endl;
-    cout<<"    - string for high-met category ('VHlep1') , for low-met category ('VHlep2') or ('ttHhad') or ('VHhadbtag') or ('VHhad0tag')"<<endl;
+    cout<<"    - string for the category: 'VHlep1' or 'VHlep2' or 'ttHhad' or 'VHhadbtag' or 'VHhad0tag'"<<endl;
+    cout<<"    - a boolean: 'true' if you want to optimize with sideband, 'false' if you want to optimize with the bkg MC"<<endl;
     cout<<endl;
     return;
   }
@@ -59,17 +60,19 @@ int MakeFit(bool save=false, TString sel="prova"){
     TFile *mass_SS  = new TFile("mass_SSVHmetT.root");
     TFile *dipho_SS = new TFile("diphobdt_output_SSVHmetT.root");
   }
-  TTree *tree_mass_CS  = (TTree*)mass_CS->Get("treeDat");
-  TH1F *histo_mass_CS  = (TH1F*) mass_CS->Get("DAT");
-  TH1F *histo_mass_SS  = (TH1F*) mass_SS->Get("DAT");
-  TH1F *histo_dipho_SS = (TH1F*) dipho_SS->Get("SIG");
+  TTree *tree_data_mass_CS  = (TTree*)mass_CS->Get("treeDat");
+  TH1F *histo_data_mass_CS  = (TH1F*) mass_CS->Get("DAT");
+  TH1F *histo_data_mass_SS  = (TH1F*) mass_SS->Get("DAT");
+  TH1F *histo_bkg_mass_CS  = (TH1F*) mass_CS->Get("BKG");
+  TH1F *histo_bkg_mass_SS  = (TH1F*) mass_SS->Get("BKG");
+  TH1F *histo_signal_dipho_SS = (TH1F*) dipho_SS->Get("SIG");
 	
   //CREATE THE DATASET AND MAKE THE FIT ON THE DIPHOTON MVA
   RooRealVar diphoMVA("diphoMVA","diphoMVA",-1,1); 
   RooRealVar mass("mass","mass",100,180); 
   RooRealVar wgt("wgt","wgt",0,100);
   RooArgList VarSet(wgt,diphoMVA,mass);	
-  RooDataSet wdata("data","data",tree_mass_CS,VarSet,0,"wgt");
+  RooDataSet wdata("data","data",tree_data_mass_CS,VarSet,0,"wgt");
   RooKeysPdf bkg("bkg","bkg",diphoMVA,wdata,RooKeysPdf::MirrorBoth,2);
   RooRealVar nbkg("nbkg","background fraction",50,0.,100000.);
   RooAddPdf model("model","model",RooArgList(bkg),RooArgList(nbkg));
@@ -94,7 +97,7 @@ int MakeFit(bool save=false, TString sel="prova"){
   mass.setRange("R2",130,180); 
   model_mass.fitTo(wdata, Range("R1,R2"), Extended(kTRUE));
   RooPlot* frame_mass = mass.frame(); 
-  wdata->plotOn(frame_mass,Binning(50)); 
+  wdata->plotOn(frame_mass,Binning(80)); 
   model_mass.plotOn(frame_mass,LineColor(kBlack)); 
   model_mass.plotOn(frame_mass, Components(model_mass),LineColor(kBlack),LineStyle(kDashed));
   frame_mass->SetTitle(0);
@@ -110,18 +113,35 @@ int MakeFit(bool save=false, TString sel="prova"){
   //DEFINE NORMALIZATON FACTOR
   ofstream norma;
   norma.open("normalization_"+sel+".txt");
-  float N_CS = histo_mass_CS->Integral();
-  float N_SS = histo_mass_SS->Integral();
+  float N_data_CS = histo_data_mass_CS->Integral();
+  float N_data_SS = histo_data_mass_SS->Integral();
+  float N_bkg_SS  = histo_bkg_mass_SS->Integral();
+  float N_bkg_SF  = histo_bkg_mass_CS->Integral(1,20) + histo_bkg_mass_CS->Integral(31,80);
   float eps_FWHM = sig->getVal();
-  float SF = N_SS/N_CS;
-  float norm = eps_FWHM * SF;
-  cout<<"eps_FWHM = "<<eps_FWHM<<endl;
-  cout<<"SF = "<<SF<<endl;
-  cout<<"NORMALIZATION = "<<norm<<endl;
-  norma<<"eps_FWHM = "<<eps_FWHM<<endl;
-  norma<<"SF = "<<SF<<endl;
-  norma<<"NORMALIZATION = "<<norm<<endl;
-  norma.close();
+  float norm_data = N_data_SS/N_data_CS;
+  float norm = 0;
+  if(sideband) {
+    norm = eps_FWHM * norm_data;
+    cout<<"eps_FWHM = "<<eps_FWHM<<endl;
+    cout<<"norm_data = "<<norm_data<<endl;
+    cout<<"NORMALIZATION = "<<norm<<endl;
+    norma<<"eps_FWHM = "<<eps_FWHM<<endl;
+    norma<<"norm_data = "<<norm_data<<endl;
+    norma<<"NORMALIZATION = "<<norm<<endl;
+    norma.close();
+  }
+  else {
+    norm = eps_FWHM * N_bkg_SS * N_data_CS/N_bkg_SF;
+    cout<<"eps_FWHM = "<<eps_FWHM<<endl;
+    cout<<"N_bkg_SS = "<<N_bkg_SS<<endl;
+    cout<<"SF       = "<<N_data_CS/N_bkg_SF<<endl;
+    cout<<"NORMALIZATION = "<<norm<<endl;
+    norma<<"eps_FWHM = "<<eps_FWHM<<endl;
+    norma<<"N_bkg_SS = "<<N_bkg_SS<<endl;
+    norma<<"SF       = "<<N_data_CS/N_bkg_SF<<endl;
+    norma<<"NORMALIZATION = "<<norm<<endl;
+    norma.close();
+  }
 	
   TH1D *DEN1  = new TH1D("yield_sig","yield_sig",20,-1-0.05,1-0.05);
   TH1D *DEN2  = new TH1D("yield_bkg","yield_bkg",20,-1-0.05,1-0.05);
@@ -137,13 +157,14 @@ int MakeFit(bool save=false, TString sel="prova"){
     char txt[100];
     sprintf(txt, "diphoton_%i_",i);
 		
-    DEN1->SetBinContent(i+1,0.75*histo_dipho_SS->Integral(mass_low,200));
+    DEN1->SetBinContent(i+1,0.75*histo_signal_dipho_SS->Integral(mass_low,200));
     DEN1->SetBinError(i+1,0.00001);
-    DEN2->SetBinContent(i+1,sig01->getVal()*norm*nbkg.getVal());
+    if(sideband) DEN2->SetBinContent(i+1,sig01->getVal()*norm*nbkg.getVal());
+    else         DEN2->SetBinContent(i+1,sig01->getVal()*norm);
     DEN2->SetBinError(i+1,0.00001);
     DEN3->SetBinContent(i+1,sig01->getVal());
     DEN3->SetBinError(i+1,0.00001);
-    DEN4->Fill(histo_dipho_SS->Integral(mass_low,200)/histo_dipho_SS->Integral(1,200),1-sig01->getVal());
+    DEN4->Fill(histo_signal_dipho_SS->Integral(mass_low,200)/histo_signal_dipho_SS->Integral(1,200),1-sig01->getVal());
 		
     ofstream myfile;
     myfile.open(txt+sel+".dat");
@@ -163,7 +184,8 @@ int MakeFit(bool save=false, TString sel="prova"){
     myfile<<"bin            cat1       cat1 "<<endl;
     myfile<<"process         VH        bkg  "<<endl;
     myfile<<"process          0         1   "<<endl;
-    myfile<<"rate          "<<0.75*histo_dipho_SS->Integral(mass_low,200)<<"   "<<sig01->getVal()*norm*nbkg.getVal()<<endl;
+    if(sideband) myfile<<"rate          "<<0.75*histo_signal_dipho_SS->Integral(mass_low,200)<<"   "<<sig01->getVal()*norm*nbkg.getVal()<<endl;
+    else         myfile<<"rate          "<<0.75*histo_signal_dipho_SS->Integral(mass_low,200)<<"   "<<sig01->getVal()*norm<<endl;
     myfile<<"------------"<<endl;
     myfile<<"VH     lnN     1.30        - "<<endl;  
     myfile<<"bkg    lnN       -        1.30 "<<endl;

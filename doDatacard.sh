@@ -1,6 +1,7 @@
 #! /bin/bash
 
 directory=$1
+sideband=$2
 
 mkdir $directory
 cd $directory
@@ -37,15 +38,34 @@ root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhadB\",\"diphobdt\_output\",200,-1,
 root -l -b -q CreateTree.C+\(true,\"SS\",\"VHhad0\",\"diphobdt\_output\",200,-1,1\) 
 root -l -b -q CreateTree.C+\(true,\"SS\",\"VHmetT\",\"diphobdt\_output\",200,-1,1\) 
 
-root -b <<EOF
-.x MakeFit.cpp
-MakeFit(true,"VHlep1")
-MakeFit(true,"VHlep2")
-MakeFit(true,"ttHhad")
-MakeFit(true,"VHhadB")
-MakeFit(true,"VHhad0")
-MakeFit(true,"VHmetT")
 
+if [ "$sideband" == "true" ]; then
+    root -b <<EOF
+.x MakeFit.cpp
+MakeFit(true,"VHlep1",true)
+MakeFit(true,"VHlep2",true)
+MakeFit(true,"ttHhad",true)
+MakeFit(true,"VHhadB",true)
+MakeFit(true,"VHhad0",true)
+MakeFit(true,"VHmetT",true)
+.q
+EOF
+fi
+
+if [ "$sideband" == "false" ]; then
+    root -b <<EOF
+.x MakeFit.cpp
+MakeFit(true,"VHlep1",false)
+MakeFit(true,"VHlep2",false)
+MakeFit(true,"ttHhad",false)
+MakeFit(true,"VHhadB",false)
+MakeFit(true,"VHhad0",false)
+MakeFit(true,"VHmetT",false)
+.q
+EOF
+fi
+
+root -b <<EOF
 .x shapeComparison.cpp
 shapeComparison(true,"VHlep")
 shapeComparison(true,"ttHhad")
@@ -56,12 +76,12 @@ shapeComparison(true,"VHmetT")
 .q
 EOF
 
-./combineCommand.sh VHlep1 OptimizationSideband_061013
-./combineCommand.sh VHlep2 OptimizationSideband_061013
-./combineCommand.sh VHmetT OptimizationSideband_061013
-./combineCommand.sh ttHhad OptimizationSideband_061013
-./combineCommand.sh VHhadB OptimizationSideband_061013
-./combineCommand.sh VHhad0 OptimizationSideband_061013
+./combineCommand.sh VHlep1
+./combineCommand.sh VHlep2
+./combineCommand.sh VHmetT
+./combineCommand.sh ttHhad
+./combineCommand.sh VHhadB
+./combineCommand.sh VHhad0
 
 
 root -b <<EOF

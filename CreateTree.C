@@ -37,7 +37,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	
   //  TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/data.root"); //DATA
   TFile *f2 = new TFile("/tmp/micheli/data_bkg.root");
-  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/signal.root"); //SIGNAL
+  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/signal2.root"); //SIGNAL
 	
 
   //------------------------------------------- DATA -------------------------------------------//
@@ -193,7 +193,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	//at least three jets and 0 btag medium
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
-	if(j3_pt_<25.)continue;
+	//	if(j3_pt_<25.)continue;
+	if(j4_pt_<25.)continue;
 	if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -391,8 +392,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j3_pt_<25.)continue;
-	  if(dipho_pt_<50)continue;
+	  //	  if(j3_pt_<25.)continue;
+	  if(j4_pt_<25.)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -446,27 +447,27 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       mass_sig_ = mass_;
       treeSig.Fill();
       h_sig[j]->Fill(variable_,weight_);
-      //      h_sig[j]->Sumw2();
+      h_sig[j]->Sumw2();
       h_sig_photonPT_leadOverM[j]->Fill(photonPT_leadOverM_,weight_);
-      //      h_sig_photonPT_leadOverM[j]->Sumw2();
+      h_sig_photonPT_leadOverM[j]->Sumw2();
       h_sig_photonPT_subleadOverM[j]->Fill(photonPT_subleadOverM_,weight_);
-      //      h_sig_photonPT_subleadOverM[j]->Sumw2();
+      h_sig_photonPT_subleadOverM[j]->Sumw2();
       h_sig_photonETA_lead[j]->Fill(photonETA_lead_,weight_);
-      //      h_sig_photonETA_lead[j]->Sumw2();
+      h_sig_photonETA_lead[j]->Sumw2();
       h_sig_photonETA_sublead[j]->Fill(photonETA_sublead_,weight_);
-      //      h_sig_photonETA_sublead[j]->Sumw2();
+      h_sig_photonETA_sublead[j]->Sumw2();
       h_sig_cosdPhiGG[j]->Fill(cosdPhiGG_,weight_);
-      //      h_sig_cosdPhiGG[j]->Sumw2();
+      h_sig_cosdPhiGG[j]->Sumw2();
       h_sig_sigmaMwvoM[j]->Fill(sigmaMwvoM_,weight_);
-      //      h_sig_sigmaMwvoM[j]->Sumw2();
+      h_sig_sigmaMwvoM[j]->Sumw2();
       h_sig_sigmaMrvoM[j]->Fill(sigmaMrvoM_,weight_);
-      //      h_sig_sigmaMrvoM[j]->Sumw2();
+      h_sig_sigmaMrvoM[j]->Sumw2();
       h_sig_vtxprob[j]->Fill(vtxprob_,weight_);
-      //      h_sig_vtxprob[j]->Sumw2();
+      h_sig_vtxprob[j]->Sumw2();
       h_sig_phoid_mvaout_lead[j]->Fill(phoid_mvaout_lead_,weight_);
-      //      h_sig_phoid_mvaout_lead[j]->Sumw2();
+      h_sig_phoid_mvaout_lead[j]->Sumw2();
       h_sig_phoid_mvaout_sublead[j]->Fill(phoid_mvaout_sublead_,weight_);
-      //      h_sig_phoid_mvaout_sublead[j]->Sumw2();
+      h_sig_phoid_mvaout_sublead[j]->Sumw2();
 
     }
   }
@@ -485,11 +486,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   names_bkg.clear();
   names_bkg.push_back("diphojet_sherpa_8TeV");
   names_bkg.push_back("gjet_20_8TeV_pf");
-  //names_bkg.push_back("gjet_40_8TeV_pf");
-  /*  names_bkg.push_back("qcd_30_8TeV_ff");
+  names_bkg.push_back("gjet_40_8TeV_pf");
+  names_bkg.push_back("qcd_30_8TeV_ff");
   names_bkg.push_back("qcd_30_8TeV_pf");
   names_bkg.push_back("DYJetsToLL");
-  names_bkg.push_back("ZGToLLG");
   names_bkg.push_back("WGToLNuG");
   names_bkg.push_back("ZGToLLG");
   names_bkg.push_back("WWJetsTo2L2Nu");
@@ -500,7 +500,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   names_bkg.push_back("Wpgg_dR02");
   names_bkg.push_back("Wmgg_dR02");
   names_bkg.push_back("Zgg_dR02");
-  names_bkg.push_back("ttgg_dR02");*/
+  names_bkg.push_back("ttgg_dR02");
   const int Nbkg = names_bkg.size();
   TH1D *h_bkg[Nbkg];
   TH1D *h_bkg_photonPT_leadOverM[Nbkg];
@@ -573,6 +573,15 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     s_bkg->SetBranchAddress("category",&category_);
     s_bkg->SetBranchAddress("dipho_pt",&dipho_pt_);
 
+    s_bkg->SetBranchAddress("photonPT_leadOverM",&photonPT_leadOverM_);
+    s_bkg->SetBranchAddress("photonPT_subleadOverM",&photonPT_subleadOverM_);
+    s_bkg->SetBranchAddress("cosdPhiGG",&cosdPhiGG_);
+    s_bkg->SetBranchAddress("sigmaMwvoM",&sigmaMwvoM_);
+    s_bkg->SetBranchAddress("sigmaMrvoM",&sigmaMrvoM_);
+    s_bkg->SetBranchAddress("vtxprob",&vtxprob_);
+    s_bkg->SetBranchAddress("phoid_mvaout_lead",&phoid_mvaout_lead_);
+    s_bkg->SetBranchAddress("phoid_mvaout_sublead",&phoid_mvaout_sublead_);
+
 		
     Int_t nentries_bkg = (Int_t)s_bkg->GetEntries();
     for (Int_t i=0;i<nentries_bkg;i++) {
@@ -610,8 +619,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j3_pt_<25.)continue;
-	  if(dipho_pt_<50)continue;
+	  if(j4_pt_<25.)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -665,27 +673,27 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
       mass_bkg_ = mass_;
       treeBkg.Fill();
       h_bkg[j]->Fill(variable_,weight_);
-      //      h_bkg[j]->Sumw2();
+      h_bkg[j]->Sumw2();
       h_bkg_photonPT_leadOverM[j]->Fill(photonPT_leadOverM_,weight_);
-      //      h_bkg_photonPT_leadOverM[j]->Sumw2();
+      h_bkg_photonPT_leadOverM[j]->Sumw2();
       h_bkg_photonPT_subleadOverM[j]->Fill(photonPT_subleadOverM_,weight_);
-      //      h_bkg_photonPT_subleadOverM[j]->Sumw2();
+      h_bkg_photonPT_subleadOverM[j]->Sumw2();
       h_bkg_photonETA_lead[j]->Fill(photonETA_lead_,weight_);
-      //      h_bkg_photonETA_lead[j]->Sumw2();
+      h_bkg_photonETA_lead[j]->Sumw2();
       h_bkg_photonETA_sublead[j]->Fill(photonETA_sublead_,weight_);
-      //      h_bkg_photonETA_sublead[j]->Sumw2();
+      h_bkg_photonETA_sublead[j]->Sumw2();
       h_bkg_cosdPhiGG[j]->Fill(cosdPhiGG_,weight_);
-      //      h_bkg_cosdPhiGG[j]->Sumw2();
+      h_bkg_cosdPhiGG[j]->Sumw2();
       h_bkg_sigmaMwvoM[j]->Fill(sigmaMwvoM_,weight_);
-      //      h_bkg_sigmaMwvoM[j]->Sumw2();
+      h_bkg_sigmaMwvoM[j]->Sumw2();
       h_bkg_sigmaMrvoM[j]->Fill(sigmaMrvoM_,weight_);
-      //      h_bkg_sigmaMrvoM[j]->Sumw2();
+      h_bkg_sigmaMrvoM[j]->Sumw2();
       h_bkg_vtxprob[j]->Fill(vtxprob_,weight_);
-      //      h_bkg_vtxprob[j]->Sumw2();
+      h_bkg_vtxprob[j]->Sumw2();
       h_bkg_phoid_mvaout_lead[j]->Fill(phoid_mvaout_lead_,weight_);
-      //      h_bkg_phoid_mvaout_lead[j]->Sumw2();
+      h_bkg_phoid_mvaout_lead[j]->Sumw2();
       h_bkg_phoid_mvaout_sublead[j]->Fill(phoid_mvaout_sublead_,weight_);
-      //      h_bkg_phoid_mvaout_sublead[j]->Sumw2();
+      h_bkg_phoid_mvaout_sublead[j]->Sumw2();
 
     }
   }   

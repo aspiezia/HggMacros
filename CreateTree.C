@@ -35,8 +35,9 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   //  TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //DATA
   //  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/Analysis_legacyV2/CMSSW_6_1_1/src/h2gglobe/AnalysisScripts/tree_legacy2.root"); //SIGNAL
 	
-  TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/tree_legacy2.root"); //DATA
-  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/tree_legacy2.root"); //SIGNAL
+  //  TFile *f2 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/data.root"); //DATA
+  TFile *f2 = new TFile("/tmp/micheli/data_bkg.root");
+  TFile *f3 = new TFile("/afs/cern.ch/work/a/aspiezia/public/4Francesco/signal2.root"); //SIGNAL
 	
 
   //------------------------------------------- DATA -------------------------------------------//
@@ -138,8 +139,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 
 	
   TH1D *h_data; h_data  = new TH1D("","",nbin,nbin_min,nbin_max); 
-  TH1D *h_data_photonPT_leadOverM=new TH1D("photonPT_leadOverM","photonPT_leadOverM",100,0.,10.);
-  TH1D *h_data_photonPT_subleadOverM=new TH1D("photonPT_subleadOverM","photonPT_subleadOverM",100,0.,10.);
+  TH1D *h_data_photonPT_leadOverM=new TH1D("photonPT_leadOverM","photonPT_leadOverM",100,0.,4.);
+  TH1D *h_data_photonPT_subleadOverM=new TH1D("photonPT_subleadOverM","photonPT_subleadOverM",100,0.,4.);
   TH1D *h_data_photonETA_lead=new TH1D("photonETA_lead","photonETA_lead",100,-3.,3.);
   TH1D *h_data_photonETA_sublead=new TH1D("photonETA_sublead","photonETA_sublead",100,-3.,3.);
   TH1D *h_data_cosdPhiGG=new TH1D("cosdPhiGG","cosdPhiGG",100,0.,1.);
@@ -192,7 +193,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	//at least three jets and 0 btag medium
 	if(photonPT_lead_<60*mass_/120.)continue;
 	if(photonPT_sublead_<25.)continue;
-	if(j3_pt_<25.)continue;
+	//	if(j3_pt_<25.)continue;
+	if(j4_pt_<25.)continue;
 	if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	    j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	    j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -258,7 +260,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     h_data_phoid_mvaout_sublead->Fill(phoid_mvaout_sublead_,weight_);
     //h_data->Sumw2();
   }
-	
+  cout<<"FMDEBUG:data ok"<<endl;	
   //------------------------------------------- SIGNAL -------------------------------------------//
   TTree treeSig("treeSig","treeSig");
   float diphoMVA_sig_=-99;
@@ -269,10 +271,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   treeSig.Branch("wgt",&wgt_sig_,"wgt/F");
   vector<TString> names_sig;
   names_sig.clear();
-  names_sig.push_back("wzh_m125_8TeV");
-  names_sig.push_back("vbf_m125_8TeV");
-  names_sig.push_back("tth_m125_8TeV");
-  names_sig.push_back("ggh_m125_8TeV");
+  names_sig.push_back("wzh_m126_8TeV");
+  names_sig.push_back("vbf_m126_8TeV");
+  names_sig.push_back("tth_m126_8TeV");
+  names_sig.push_back("ggh_m126_8TeV");
   TH1D *h_sig[4]; 
   TH1D *h_sig_photonPT_leadOverM[4];
   TH1D *h_sig_photonPT_subleadOverM[4];
@@ -289,16 +291,16 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 
     TTree *s_sig   = (TTree*)f3->Get(names_sig[j]);
     h_sig[j] = new TH1D("","",nbin,nbin_min,nbin_max); 
-    h_sig_photonPT_leadOverM[j] = new TH1D("sig_photonPT_leadOverM","sig_photonPT_leadOverM",100,0.,10.);
-    h_sig_photonPT_subleadOverM[j] = new TH1D("sig_photonPT_subleadOverM","sig_photonPT_subleadOverM",100,0.,10.);
-    h_sig_photonETA_lead[j] = new TH1D("sig_photonETA_lead","sig_photonETA_lead",100,-3.,3.);
-    h_sig_photonETA_sublead[j] = new TH1D("sig_photonETA_sublead","sig_photonETA_sublead",100,-3.,3.);
-    h_sig_cosdPhiGG[j] = new TH1D("sig_cosdPhiGG","sig_cosdPhiGG",100,0.,1.);
-    h_sig_sigmaMwvoM[j] = new TH1D("sig_sigmaMwvoM","sig_sigmaMwvoM",100,0.,1.);
-    h_sig_sigmaMrvoM[j] = new TH1D("sig_sigmaMrvoM","sig_sigmaMrvoM",100,0.,1.);
-    h_sig_vtxprob[j] = new TH1D("sig_vtxprob","sig_vtxprob",100,0.,1.);
-    h_sig_phoid_mvaout_lead[j] = new TH1D("sig_phoid_mvaout_lead","sig_phoid_mvaout_lead",100,-1.,1.);
-    h_sig_phoid_mvaout_sublead[j] = new TH1D("sig_phoid_mvaout_sublead","sig_phoid_mvaout_sublead",100,-1.,1.);
+    h_sig_photonPT_leadOverM[j] = new TH1D("","",100,0.,10.);
+    h_sig_photonPT_subleadOverM[j] = new TH1D("","",100,0.,10.);
+    h_sig_photonETA_lead[j] = new TH1D("","",100,-3.,3.);
+    h_sig_photonETA_sublead[j] = new TH1D("","",100,-3.,3.);
+    h_sig_cosdPhiGG[j] = new TH1D("","",100,0.,1.);
+    h_sig_sigmaMwvoM[j] = new TH1D("","",100,0.,1.);
+    h_sig_sigmaMrvoM[j] = new TH1D("","",100,0.,1.);
+    h_sig_vtxprob[j] = new TH1D("","",100,0.,1.);
+    h_sig_phoid_mvaout_lead[j] = new TH1D("","",100,-1.,1.);
+    h_sig_phoid_mvaout_sublead[j] = new TH1D("","",100,-1.,1.);
 
     s_sig->SetMakeClass(1);
 		
@@ -390,8 +392,8 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j3_pt_<25.)continue;
-	  if(dipho_pt_<50)continue;
+	  //	  if(j3_pt_<25.)continue;
+	  if(j4_pt_<25.)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -472,6 +474,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     
     
   //------------------------------------------- BKG -------------------------------------------//
+  cout<<"FMDEBUG:tree ok"<<endl;	
   TTree treeBkg("treeBkg","treeBkg");
   float diphoMVA_bkg_=-99;
   float wgt_bkg_=-99;
@@ -483,11 +486,10 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   names_bkg.clear();
   names_bkg.push_back("diphojet_sherpa_8TeV");
   names_bkg.push_back("gjet_20_8TeV_pf");
-  //names_bkg.push_back("gjet_40_8TeV_pf");
+  names_bkg.push_back("gjet_40_8TeV_pf");
   names_bkg.push_back("qcd_30_8TeV_ff");
   names_bkg.push_back("qcd_30_8TeV_pf");
   names_bkg.push_back("DYJetsToLL");
-  names_bkg.push_back("ZGToLLG");
   names_bkg.push_back("WGToLNuG");
   names_bkg.push_back("ZGToLLG");
   names_bkg.push_back("WWJetsTo2L2Nu");
@@ -501,31 +503,31 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
   names_bkg.push_back("ttgg_dR02");
   const int Nbkg = names_bkg.size();
   TH1D *h_bkg[Nbkg];
-  TH1D *h_bkg_photonPT_leadOverM[4];
-  TH1D *h_bkg_photonPT_subleadOverM[4];
-  TH1D *h_bkg_photonETA_lead[4];
-  TH1D *h_bkg_photonETA_sublead[4];
-  TH1D *h_bkg_cosdPhiGG[4];
-  TH1D *h_bkg_sigmaMwvoM[4];
-  TH1D *h_bkg_sigmaMrvoM[4];
-  TH1D *h_bkg_vtxprob[4];
-  TH1D *h_bkg_phoid_mvaout_lead[4];
-  TH1D *h_bkg_phoid_mvaout_sublead[4];
+  TH1D *h_bkg_photonPT_leadOverM[Nbkg];
+  TH1D *h_bkg_photonPT_subleadOverM[Nbkg];
+  TH1D *h_bkg_photonETA_lead[Nbkg];
+  TH1D *h_bkg_photonETA_sublead[Nbkg];
+  TH1D *h_bkg_cosdPhiGG[Nbkg];
+  TH1D *h_bkg_sigmaMwvoM[Nbkg];
+  TH1D *h_bkg_sigmaMrvoM[Nbkg];
+  TH1D *h_bkg_vtxprob[Nbkg];
+  TH1D *h_bkg_phoid_mvaout_lead[Nbkg];
+  TH1D *h_bkg_phoid_mvaout_sublead[Nbkg];
 
-  for(unsigned int j=0; j<names_bkg.size(); j++){
+   for(unsigned int j=0; j<names_bkg.size(); j++){
     TTree *s_bkg   = (TTree*)f2->Get(names_bkg[j]);
     h_bkg[j] = new TH1D("","",nbin,nbin_min,nbin_max); 
     s_bkg->SetMakeClass(1);
-    h_bkg_photonPT_leadOverM[j] = new TH1D("bkg_photonPT_leadOverM","bkg_photonPT_leadOverM",100,0.,10.);
-    h_bkg_photonPT_subleadOverM[j] = new TH1D("bkg_photonPT_subleadOverM","bkg_photonPT_subleadOverM",100,0.,10.);
-    h_bkg_photonETA_lead[j] = new TH1D("bkg_photonETA_lead","bkg_photonETA_lead",100,-3.,3.);
-    h_bkg_photonETA_sublead[j] = new TH1D("bkg_photonETA_sublead","bkg_photonETA_sublead",100,-3.,3.);
-    h_bkg_cosdPhiGG[j] = new TH1D("bkg_cosdPhiGG","bkg_cosdPhiGG",100,0.,1.);
-    h_bkg_sigmaMwvoM[j] = new TH1D("bkg_sigmaMwvoM","bkg_sigmaMwvoM",100,0.,1.);
-    h_bkg_sigmaMrvoM[j] = new TH1D("bkg_sigmaMrvoM","bkg_sigmaMrvoM",100,0.,1.);
-    h_bkg_vtxprob[j] = new TH1D("bkg_vtxprob","bkg_vtxprob",100,0.,1.);
-    h_bkg_phoid_mvaout_lead[j] = new TH1D("bkg_phoid_mvaout_lead","bkg_phoid_mvaout_lead",100,-1.,1.);
-    h_bkg_phoid_mvaout_sublead[j] = new TH1D("bkg_phoid_mvaout_sublead","bkg_phoid_mvaout_sublead",100,-1.,1.);
+    h_bkg_photonPT_leadOverM[j] = new TH1D("","",100,0.,10.);
+    h_bkg_photonPT_subleadOverM[j] = new TH1D("","",100,0.,10.);
+    h_bkg_photonETA_lead[j] = new TH1D("","",100,-3.,3.);
+    h_bkg_photonETA_sublead[j] = new TH1D("","",100,-3.,3.);
+    h_bkg_cosdPhiGG[j] = new TH1D("","",100,0.,1.);
+    h_bkg_sigmaMwvoM[j] = new TH1D("","",100,0.,1.);
+    h_bkg_sigmaMrvoM[j] = new TH1D("","",100,0.,1.);
+    h_bkg_vtxprob[j] = new TH1D("","",100,0.,1.);
+    h_bkg_phoid_mvaout_lead[j] = new TH1D("","",100,-1.,1.);
+    h_bkg_phoid_mvaout_sublead[j] = new TH1D("","",100,-1.,1.);
 
 		
     s_bkg->SetBranchAddress("dataset",&dataset_);
@@ -571,6 +573,15 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
     s_bkg->SetBranchAddress("category",&category_);
     s_bkg->SetBranchAddress("dipho_pt",&dipho_pt_);
 
+    s_bkg->SetBranchAddress("photonPT_leadOverM",&photonPT_leadOverM_);
+    s_bkg->SetBranchAddress("photonPT_subleadOverM",&photonPT_subleadOverM_);
+    s_bkg->SetBranchAddress("cosdPhiGG",&cosdPhiGG_);
+    s_bkg->SetBranchAddress("sigmaMwvoM",&sigmaMwvoM_);
+    s_bkg->SetBranchAddress("sigmaMrvoM",&sigmaMrvoM_);
+    s_bkg->SetBranchAddress("vtxprob",&vtxprob_);
+    s_bkg->SetBranchAddress("phoid_mvaout_lead",&phoid_mvaout_lead_);
+    s_bkg->SetBranchAddress("phoid_mvaout_sublead",&phoid_mvaout_sublead_);
+
 		
     Int_t nentries_bkg = (Int_t)s_bkg->GetEntries();
     for (Int_t i=0;i<nentries_bkg;i++) {
@@ -608,8 +619,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 	  //at least three jets and 0 btag medium
 	  if(photonPT_lead_<60*mass_/120.)continue;
 	  if(photonPT_sublead_<25.)continue;
-	  if(j3_pt_<25.)continue;
-	  if(dipho_pt_<50)continue;
+	  if(j4_pt_<25.)continue;
 	  if((j1_algoPF1_csvBtag_>0.679 || j2_algoPF1_csvBtag_>0.679 || j3_algoPF1_csvBtag_>0.679 ||j4_algoPF1_csvBtag_>0.679||
 	      j5_algoPF1_csvBtag_>0.679 || j6_algoPF1_csvBtag_>0.679 || j7_algoPF1_csvBtag_>0.679 ||j8_algoPF1_csvBtag_>0.679||
 	      j9_algoPF1_csvBtag_>0.679 || j10_algoPF1_csvBtag_>0.679))continue;
@@ -687,7 +697,7 @@ void CreateTree(bool save=false, TString sample="prova", TString sel="prova", TS
 
     }
   }   
-	
+  cout<<"FMDEBUG:bkg ok"<<endl;		
   TH1D *DAT  = new TH1D("DAT","DAT",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
   TH1D *SIG  = new TH1D("SIG","SIG",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
   TH1D *BKG  = new TH1D("BKG","BKG",h_data->GetNbinsX(),h_data->GetXaxis()->GetXmin(),h_data->GetXaxis()->GetXmax());
